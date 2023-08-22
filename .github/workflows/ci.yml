@@ -44,7 +44,7 @@ jobs:
     - name: No-default features
       run: cargo test --workspace --no-default-features
     - name: Journey
-      if: ${{ matrix.os }} != 'windows-latest' # on windows, journey tests don't run yet and it's not important enough right now
+      if: ${{ matrix.os != 'windows-latest' }} # on windows, journey tests don't run yet and it's not important enough right now
       run: just ci-test
   installation:
     name: Installation
