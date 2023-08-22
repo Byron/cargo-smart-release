@@ -5,25 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 0.21.0 (2023-08-22)
+
+<csr-id-528638729492300730aebee283d2a837325b4a62/>
+<csr-id-ba76b8bd911b98ab78fec3cf6c8e7ee679721a6f/>
+<csr-id-67eb1d9e3d396cc7f786d767e287d7e946ed3118/>
+<csr-id-d6075a44bff9073c811510e86d73216baa844a69/>
+<csr-id-c829ffcf262464b9d963f3415f44fcb3c53d7a47/>
+<csr-id-462b3f878b63a5d483094a8a827f740cb59a96f8/>
+<csr-id-7b960c061fda7d371245c52fa94f6957689bbb6a/>
+<csr-id-00ad37542abf250ffda04d92cdfbb2db945e58a9/>
+<csr-id-7638bb5f5a3e81f7cf62913ad5bd1aac7cff6cbe/>
+<csr-id-9658f32181c1c3b3b836eadca5274d38f3dd57c4/>
+<csr-id-3ccdb43562a35f2556a0ade9fb1beb8d5e33a2eb/>
+<csr-id-64801454750b21f0e72b7b571d1318256b11f4a3/>
+<csr-id-f2ad685e56caf4612378649b8c68c99ac3225ccc/>
+<csr-id-80cbe46e6710d51a5aa0369bc397ae211eb70dbb/>
+<csr-id-bd44a1a34f1f68eb35b043bbf9f3f9bb616e5705/>
 
 This is the first release of from [its own repository](https://github.com/Byron/cargo-smart-release) which for the first time comes without `git2` dependency,
 and is solely powered by `gix`.
 
 Please note that due to the rewritten history and tag-name changes, this changelog also looks quite a bit different in its historical parts.
 
-<csr-id-528638729492300730aebee283d2a837325b4a62/> 
-<csr-id-ba76b8bd911b98ab78fec3cf6c8e7ee679721a6f/>
-<csr-id-67eb1d9e3d396cc7f786d767e287d7e946ed3118/>
-<csr-id-d6075a44bff9073c811510e86d73216baa844a69/>
-
 ### New Features (BREAKING)
 
-- <csr-id-0183d55c92dfeaff82f16d13e52fa23427d75e19/> use `crates-index` with https://github.com/frewsxcv/rust-crates-index/pull/129 applied.
-  This means `git2` is now fully removed from the tools used by `gitoxide`.
-
-  Note that this also means that the `vendored-ssl` feature has been removed as there is no equivalent.
-  It might be worth to add feature toggles that change to another backend though.
+ - <csr-id-0183d55c92dfeaff82f16d13e52fa23427d75e19/> use `crates-index` with https://github.com/frewsxcv/rust-crates-index/pull/129 applied.
+   This means `git2` is now fully removed from the tools used by `gitoxide`.
+   
+   Note that this also means that the `vendored-ssl` feature has been removed as there is no equivalent.
+   It might be worth to add feature toggles that change to another backend though.
 
 ### Bug Fixes
 
@@ -51,7 +62,7 @@ Please note that due to the rewritten history and tag-name changes, this changel
 
 <csr-read-only-do-not-edit/>
 
- - 31 commits contributed to the release over the course of 30 calendar days.
+ - 32 commits contributed to the release over the course of 31 calendar days.
  - 34 days passed between releases.
  - 17 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -63,6 +74,7 @@ Please note that due to the rewritten history and tag-name changes, this changel
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Prepare changelog ([`4f6afe2`](https://github.com/Byron/cargo-smart-release/commit/4f6afe2e3a5b8903bd0b70a4cc16e6333958ead3))
     - Remove msrv check as it's not needed for a binary ([`abaad04`](https://github.com/Byron/cargo-smart-release/commit/abaad04ac2b72e9a763eea484ac6f547a132a9ef))
     - Provide justfile and improve automation ([`7e2a6ca`](https://github.com/Byron/cargo-smart-release/commit/7e2a6cab25de699f395daabf98e15eefa8b2aa23))
     - Update dependencies ([`aea1a51`](https://github.com/Byron/cargo-smart-release/commit/aea1a519ceeffae53b563e3ff30314db01a73649))
@@ -100,6 +112,90 @@ Please note that due to the rewritten history and tag-name changes, this changel
 
 <csr-id-bcad5c22049d56a25ef69d6c7a3344e78f9a1d4d/>
 <csr-id-dbc6cbb4363c2532f81b0bd6e351c4577bb9e9a3/>
+<csr-id-03c57aeb4586059a5065c56ff56044f24880af90/>
+<csr-id-feb40e0f068c299ff3a5204caad0c3834bf0b9c9/>
+<csr-id-79e37f5a53802f4f2499d426856d0ea0d316599d/>
+<csr-id-96fd2c1b2db3ba7959a97d212f64ac0ed7184132/>
+<csr-id-d99db2e632b25a8b020491c3e1d40bf2efd3472a/>
+<csr-id-4163ad78c72df3a993bea6084fc05c6a2a44b9c2/>
+<csr-id-4452ea424cf11a56e48ceb0e2764d31f7e2c242e/>
+<csr-id-45f23a30c715e3da15deeb5c4b808c99e3b80033/>
+<csr-id-ee8a2b5fa6dc2e586767d60d141f1abade64fe8f/>
+<csr-id-f2d2bfad7c65c6d8a961bbbb0970f27de5a5c33e/>
+<csr-id-17173c85ac4806e1ecdbd06bacc70b37d5647779/>
+<csr-id-33a2d9f1ebbfb078649dad5ce07fae0aa1e857b4/>
+<csr-id-8ab83d5a84f341c34cc059e27e45019390ec25d5/>
+<csr-id-85bd41841d2721e857d605f42ac021bd37285ede/>
+<csr-id-e746ee9791ea086ff98a79efb522d177c64f4846/>
+<csr-id-4f3808d76a5a732970c5ef744a8375e7ab729357/>
+<csr-id-489c035a0366e98a0654b824df577ca6287ab964/>
+<csr-id-4d2e66b2593a1360f4405fd319a290d98e336987/>
+<csr-id-6d4ba38f7c61860c068bb351c521fdaec4cdcbc6/>
+<csr-id-0bb7f48f2b2c3cdaf4dadac5163f03b923489cf5/>
+<csr-id-245c84673a59e3569d0ab628a3051959c5c48b7a/>
+<csr-id-a6e2c581cfcf2e8395b7ead3e4d82a0a5a47d25f/>
+<csr-id-4f0c9fb70630abccd83a43beb338d504f62381c2/>
+<csr-id-689150655fe6b9bd83cb1d6a3c6c461f6bca38a3/>
+<csr-id-bfe6febccc3f3631566e6d24b32b5d92e73d49f9/>
+<csr-id-bfc2733b28276e916eabfb2137c983fb07cc6eed/>
+<csr-id-a2a750c35df6faaeda50db2a61e7b5bfcc21f9be/>
+<csr-id-5a4c43abb465c24a37ebc2697aa2d4675e3bef96/>
+<csr-id-721c8f7acdade982f617299077ef3958c379f55b/>
+<csr-id-d847ff8af4d2f82b6aeb8e02bbed17570fff760b/>
+<csr-id-b0f93567029381414eea9e7752ebaa251da11502/>
+<csr-id-aac36685b88075553241fc55e83982da4b4d7e82/>
+<csr-id-af8eeeb31f33484f84b8e37958802a4e24f58edc/>
+<csr-id-571c98ed65eb162d6e4d227653bc41e2fa053eb1/>
+<csr-id-59e477a7dbe738594e00dcba53d685e099933adf/>
+<csr-id-505c94854a00fc135cd037ef848ed4eb8a6ade2e/>
+<csr-id-12c4b49d956999e9b9151a26bded7f103bea73e1/>
+<csr-id-11b7ce634faeb68709cf9ee4b36aefed846e3cce/>
+<csr-id-9d29488b124a37a252db60b9e84ad2911484b44a/>
+<csr-id-df9204e93d735329a012bd2256945a63980a5590/>
+<csr-id-62705deb6f8119e30b92af83616292628551f050/>
+<csr-id-4dfdc898f5930bab82bbfb8c871aa1df40b03e88/>
+<csr-id-0d2cb64ac5d66328449793683fd9bb866b851f02/>
+<csr-id-ed56f26e4f09432f4eca4c05638313edb25cd493/>
+<csr-id-da676e5732eec0b633748eb640009a3c64f2e7f7/>
+<csr-id-ba1ba749b4fa9df368771b64eeed4625d4479dab/>
+<csr-id-f6f441479cde179d92b095889797adeda3bce379/>
+<csr-id-a1db0f1900e465b8bfb521a82691f2567bf357fd/>
+<csr-id-4f9f1f94d950b22d730eaa4d31d91cab7ca5890a/>
+<csr-id-9fd83a0e020cf4c45b1874290dbd7ebdba69d738/>
+<csr-id-151f10e895145241b91d29e1b9db723409798684/>
+<csr-id-8b96c9d7373fc31ba068aefad51c25a4cab3b87c/>
+<csr-id-de1155bb13e02fcc67eaee6cbdc3f9cf1334e537/>
+<csr-id-9f2900c62a182de085869263289eb06c6624c8a0/>
+<csr-id-69473e9274034c4f7844fcba6859ae9e3ff84547/>
+<csr-id-cc08f344687221476d87318b76ded2b0ded488de/>
+<csr-id-654d64604a455c43547c40bf003eaf19289376fb/>
+<csr-id-6c067c73fd73914d4a135f7072065b9123059d3f/>
+<csr-id-eab816ae90b83940d549f110d00b69671f699fdb/>
+<csr-id-307bf1b8f11b9d7bc787d7cadf151a6310a15765/>
+<csr-id-1cea98086a6676594c099162f72f7c910127f755/>
+<csr-id-b196db6d12a353fbf0b5d5dd61c98099f997866e/>
+<csr-id-4d44cd7ca51f05fb06185677642d73c0ff0da079/>
+<csr-id-2b6bb28cd18916a6244a2632a6abcba9362b9fd0/>
+<csr-id-80d4cdd688e88b897f384b770f9c13268ecb3793/>
+<csr-id-716170eaa853ddf3032baa9b107eb3e44d6a4124/>
+<csr-id-96297f038d8d931bb9d5ba4dfcdced18d7c81061/>
+<csr-id-60a8ec89e3f97baad0dbe097e03dc0cd30899e02/>
+<csr-id-afaba35d39c75d13138e2928cddeb0b93601cee3/>
+<csr-id-62401b8eafb71d8a928137f6f8dfc25340e39bbf/>
+<csr-id-2c4a7f574f6fed6655e8b2f25916c22d7bf08ad1/>
+<csr-id-563de12d25e777e7244a73308090adcfb8b90014/>
+<csr-id-6c8df60dc4015279cef303cab8f4760efb5ebea8/>
+<csr-id-d1dd4ae94067be2f3158fa46b0e78504705dfb26/>
+<csr-id-037f37906dad6d39f9fad371bc9a8ab76e8bd5c4/>
+<csr-id-afd6a45ef73201bf5d5f3d4f0317f432b17c60d0/>
+<csr-id-083884043cc08394c6f91df81e6407721b2dc19e/>
+<csr-id-2768727452315929d88dda7d0686440d8e668736/>
+<csr-id-afeff23549a05cd0e5997f129e5d7a564ec41866/>
+<csr-id-fbaab420b9e4e01e60522f87e89e2e0a28250c73/>
+<csr-id-e7b7555d1516d0b274e7269961fce9ec9b30bc98/>
+<csr-id-19b6df4e9d25d502ec4e21cb950a186f8b4300ce/>
+<csr-id-38a07f2ad061f2eba143532c94d23b4254aec438/>
+<csr-id-38e3835b1b1fb90a7596b3cb08dd18c903a5acce/>
 
 ### Chore
 
