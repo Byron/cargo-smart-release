@@ -51,6 +51,17 @@ jobs:
       run: just ci-test
     - name: Journey
       run: cargo test --workspace --no-default-features
+  installation:
+    name: Test
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "windows-latest"]
+        rust: ["stable"]
+    continue-on-error: ${{ matrix.rust != 'stable' }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Installation from crates.io: cargo-smart-release"
+        run: cargo install --debug --force cargo-smart-release
   lockfile:
     runs-on: ubuntu-latest
     steps:
