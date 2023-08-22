@@ -52,7 +52,7 @@ jobs:
     - name: Journey
       run: cargo test --workspace --no-default-features
   installation:
-    name: Test
+    name: Installation
     strategy:
       matrix:
         os: ["ubuntu-latest", "windows-latest"]
