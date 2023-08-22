@@ -19,7 +19,7 @@ jobs:
     permissions:
       contents: none
     name: CI
-    needs: [test, msrv, docs, rustfmt, clippy]
+    needs: [test, docs, rustfmt, clippy, installation]
     runs-on: ubuntu-latest
     steps:
       - name: Done
