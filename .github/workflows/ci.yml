@@ -46,7 +46,10 @@ jobs:
       run: cargo test --workspace
     - name: All features
       run: cargo test --workspace --all-features
+    - uses: extractions/setup-just@v1
     - name: No-default features
+      run: just ci-test
+    - name: Journey
       run: cargo test --workspace --no-default-features
   msrv:
     name: "Check MSRV: 1.65.0"
