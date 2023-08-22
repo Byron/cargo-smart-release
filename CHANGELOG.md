@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.1 (2023-08-22)
+
+### Chore
+
+ - <csr-id-431cd880e06fcd9e194700739bd7c7a93575c4a0/> update repository to not point at `gitoxide` anymore
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Update repository to not point at `gitoxide` anymore ([`431cd88`](https://github.com/Byron/cargo-smart-release/commit/431cd880e06fcd9e194700739bd7c7a93575c4a0))
+</details>
+
 ## 0.21.0 (2023-08-22)
 
 <csr-id-528638729492300730aebee283d2a837325b4a62/>
@@ -62,7 +86,7 @@ Please note that due to the rewritten history and tag-name changes, this changel
 
 <csr-read-only-do-not-edit/>
 
- - 32 commits contributed to the release over the course of 31 calendar days.
+ - 33 commits contributed to the release over the course of 31 calendar days.
  - 34 days passed between releases.
  - 17 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -74,6 +98,7 @@ Please note that due to the rewritten history and tag-name changes, this changel
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release cargo-smart-release v0.21.0 ([`72267e0`](https://github.com/Byron/cargo-smart-release/commit/72267e07c3bd78008cccc5ca550e73a0b4cc0061))
     - Prepare changelog ([`4f6afe2`](https://github.com/Byron/cargo-smart-release/commit/4f6afe2e3a5b8903bd0b70a4cc16e6333958ead3))
     - Remove msrv check as it's not needed for a binary ([`abaad04`](https://github.com/Byron/cargo-smart-release/commit/abaad04ac2b72e9a763eea484ac6f547a132a9ef))
     - Provide justfile and improve automation ([`7e2a6ca`](https://github.com/Byron/cargo-smart-release/commit/7e2a6cab25de699f395daabf98e15eefa8b2aa23))
