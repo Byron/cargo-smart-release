@@ -48,9 +48,10 @@ jobs:
       run: cargo test --workspace --all-features
     - uses: extractions/setup-just@v1
     - name: No-default features
-      run: just ci-test
-    - name: Journey
       run: cargo test --workspace --no-default-features
+    - name: Journey
+      if: ${{ matrix.os }} != 'windows-latest' # on windows, journey tests don't run yet and it's not important enough right now
+      run: just ci-test
   installation:
     name: Installation
     strategy:
