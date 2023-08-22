@@ -115,9 +115,6 @@ jobs:
       uses: actions/checkout@v3
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: 1.65.0  # MSRV
-        components: clippy
     - uses: Swatinem/rust-cache@v2
     - name: Install SARIF tools
       run: cargo install clippy-sarif --version 0.3.4 --locked  # Held back due to msrv
