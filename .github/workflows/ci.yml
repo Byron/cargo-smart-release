@@ -29,16 +29,10 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
-        rust: ["stable"]
-    continue-on-error: ${{ matrix.rust != 'stable' }}
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: ${{ matrix.rust }}
     - uses: Swatinem/rust-cache@v2
     - name: Build
       run: cargo test --no-run --workspace --all-features
@@ -68,10 +62,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: stable
     - uses: Swatinem/rust-cache@v2
     - name: "Is lockfile updated?"
       run: cargo fetch --locked
@@ -81,10 +71,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: stable
     - uses: Swatinem/rust-cache@v2
     - name: Check documentation
       env:
@@ -96,13 +82,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        # Not MSRV because its harder to jump between versions and people are
-        # more likely to have stable
-        toolchain: stable
-        components: rustfmt
     - uses: Swatinem/rust-cache@v2
     - name: Check formatting
       run: cargo fmt --all -- --check
@@ -114,13 +93,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
     - uses: Swatinem/rust-cache@v2
     - name: Install SARIF tools
-      run: cargo install clippy-sarif --version 0.3.4 --locked  # Held back due to msrv
+      run: cargo install clippy-sarif
     - name: Install SARIF tools
-      run: cargo install sarif-fmt --version 0.3.4 --locked # Held back due to msrv
+      run: cargo install sarif-fmt
     - name: Check
       run: >
         cargo clippy --workspace --all-features --all-targets --message-format=json -- -D warnings --allow deprecated
