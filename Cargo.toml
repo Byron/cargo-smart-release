@@ -24,7 +24,7 @@ test = false
 cache-efficiency-debug = ["gix/cache-efficiency-debug"]
 
 [dependencies]
-gix = { version = "^0.51.0", default-features = false, features = ["max-performance"] }
+gix = { version = "0.54.1", default-features = false, features = ["max-performance", "interrupt"] }
 anyhow = "1.0.42"
 clap = { version = "4.1.0", features = ["derive", "cargo"] }
 env_logger = { version = "0.10.0", default-features = false, features = ["humantime", "auto-color"] }

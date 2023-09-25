@@ -5,7 +5,7 @@ use options::{Args, SubCommands};
 use cargo_smart_release::command;
 
 fn main() -> anyhow::Result<()> {
-    gix::interrupt::init_handler(|| {})?;
+    gix::interrupt::init_handler(2, || {})?;
     unsafe {
         // SAFETY: we don't manipulate the environment from any thread
         time::util::local_offset::set_soundness(time::util::local_offset::Soundness::Unsound);
