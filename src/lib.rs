@@ -1,4 +1,5 @@
 #![deny(rust_2018_idioms)]
+#![allow(clippy::result_large_err)]
 
 pub use context::Context;
 
