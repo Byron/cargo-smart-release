@@ -28,7 +28,7 @@ gix = { version = "0.54.1", default-features = false, features = ["max-performan
 anyhow = "1.0.42"
 clap = { version = "4.1.0", features = ["derive", "cargo"] }
 env_logger = { version = "0.10.0", default-features = false, features = ["humantime", "auto-color"] }
-cargo_metadata = "0.17.0"
+cargo_metadata = "0.18.0"
 log = "0.4.14"
 toml_edit = "0.19.1"
 semver = "1.0.4"
