@@ -5,7 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.2 (2023-10-12)
+
+### Bug Fixes
+
+ - <csr-id-1236efa69e313ea22352397424eaafa8f630c5df/> assure we find the highest available version when picking the next version.
+   Otherwise it can be that higher versions 'hide' behind lower ones which can
+   happen if a backport is made, for example.
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 12 commits contributed to the release over the course of 51 calendar days.
+ - 51 days passed between releases.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Thanks Clippy
+
+<csr-read-only-do-not-edit/>
+
+[Clippy](https://github.com/rust-lang/rust-clippy) helped 1 time to make code idiomatic. 
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Assure we find the highest available version when picking the next version. ([`1236efa`](https://github.com/Byron/cargo-smart-release/commit/1236efa69e313ea22352397424eaafa8f630c5df))
+    - Thanks clippy ([`2ee59e1`](https://github.com/Byron/cargo-smart-release/commit/2ee59e1843d59f1c4ed75e968d5e2409c9996e9a))
+    - Upgrade cargo-metadata to latest version ([`e6e6f75`](https://github.com/Byron/cargo-smart-release/commit/e6e6f75b1b31109577e0d6407f605f9629fbb6cd))
+    - Update crates-index to latest version so `gix` is the same ([`58fa999`](https://github.com/Byron/cargo-smart-release/commit/58fa999519dc4b72aaf6fa9d48a47c94ee8e2d6e))
+    - Upgrade to `gix` 0.54 ([`54af21a`](https://github.com/Byron/cargo-smart-release/commit/54af21a2f255350ad833a259807a4bdec2fd88aa))
+    - Try once more to get the if: syntax right ([`77c921a`](https://github.com/Byron/cargo-smart-release/commit/77c921ae523161f43b8ce34402866e51b9dd5818))
+    - Try to speed-up CI by removing rust installation steps in favor of the one included in image ([`df61a57`](https://github.com/Byron/cargo-smart-release/commit/df61a5778e8c4ca6fc01c6055737207ad9d760cc))
+    - Prevent journey tests from running (and failing) on windows ([`b5e9634`](https://github.com/Byron/cargo-smart-release/commit/b5e963408ba1e6def18e1a05cf178c46a82d7c9b))
+    - Remove last mention of MSRV ([`77bcb37`](https://github.com/Byron/cargo-smart-release/commit/77bcb3793eb8fb0b34d33c457d6cbf9f195389c1))
+    - Rename workflow: Test -> eInstallation ([`e7e0666`](https://github.com/Byron/cargo-smart-release/commit/e7e0666ed490a3f8bbea848305eff39bba320d4b))
+    - Fix CI workflow ([`ed09a0c`](https://github.com/Byron/cargo-smart-release/commit/ed09a0cfcf59cd4ba19c02b507e285411ce14b83))
+    - Add test for installation of binary ([`df23b2c`](https://github.com/Byron/cargo-smart-release/commit/df23b2c23a689f9c3993af3fc96d0fb5fe7c9194))
+</details>
+
 ## 0.21.1 (2023-08-22)
+
+<csr-id-431cd880e06fcd9e194700739bd7c7a93575c4a0/>
 
 ### Chore
 
@@ -15,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 1 commit contributed to the release.
+ - 2 commits contributed to the release.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -26,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release cargo-smart-release v0.21.1 ([`7454750`](https://github.com/Byron/cargo-smart-release/commit/7454750aae2745aac37786f13d9401e591f9c83b))
     - Update repository to not point at `gitoxide` anymore ([`431cd88`](https://github.com/Byron/cargo-smart-release/commit/431cd880e06fcd9e194700739bd7c7a93575c4a0))
 </details>
 
