@@ -145,6 +145,10 @@ pub enum SubCommands {
         #[clap(long, visible_alias = "only", help_heading = Some("CUSTOMIZATION"))]
         no_dependencies: bool,
 
+        /// Alternative registry to publish to.
+        #[clap(long, help_heading = Some("CUSTOMIZATION"))]
+        registry: Option<String>,
+
         /// Pass --no-verify to 'cargo publish' which should only be a last resort when fixing up packages that
         /// otherwise wouldn't publish, but need to be publish to resolve the situation.
         #[clap(long, help_heading = Some("EXPERT"))]
@@ -161,10 +165,6 @@ pub enum SubCommands {
         /// Capitalize commit messages.
         #[clap(long, help_heading = Some("CHANGELOG"))]
         capitalize_commit: bool,
-
-        /// Alternative registry to publish to
-        #[clap(long, help_heading = Some("REGISTRY"))]
-        registry: Option<String>,
     },
     #[clap(name = "changelog", version = option_env!("CARGO_SMART_RELEASE_VERSION"))]
     /// Generate changelogs from commit histories, non-destructively.
