@@ -8,12 +8,13 @@ use std::{
 use gix::bstr::ByteSlice;
 use pulldown_cmark::{CowStr, Event, HeadingLevel, OffsetIter, Tag};
 use winnow::{
+    ascii,
     combinator::alt,
     combinator::opt,
     combinator::{delimited, preceded, separated_pair, terminated},
     error::{FromExternalError, ParserError},
     prelude::*,
-    token::{tag_no_case, take_till0, take_while},
+    token::{tag, take_till, take_while},
 };
 
 use crate::{
@@ -485,10 +486,10 @@ fn headline<'a, E: ParserError<&'a str> + FromExternalError<&'a str, ()>>(i: &mu
                 alt((
                     (
                         opt("v"),
-                        take_till0(char::is_whitespace)
+                        take_till(0.., char::is_whitespace)
                             .try_map(|v| semver::Version::parse(v).map_err(|_| ()).map(Some)),
                     ),
-                    tag_no_case("unreleased").map(|_| (None, None)),
+                    tag(ascii::Caseless("unreleased")).map(|_| (None, None)),
                 )),
             ),
             opt(preceded(
