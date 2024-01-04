@@ -48,11 +48,7 @@ pub enum Version {
 
 impl PartialOrd for Version {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        match (self, other) {
-            (Version::Unreleased, _) => Ordering::Greater.into(),
-            (_, Version::Unreleased) => Ordering::Less.into(),
-            (Version::Semantic(lhs), Version::Semantic(rhs)) => lhs.partial_cmp(rhs),
-        }
+        Some(self.cmp(other))
     }
 }
 

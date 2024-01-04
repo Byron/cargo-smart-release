@@ -176,8 +176,8 @@ fn present_and_validate_dependencies(
         let skipped_len = skipped.len();
         let mut crates_by_reason: Vec<_> = skipped
             .into_iter()
-            .fold(BTreeMap::default(), |mut acc, (name, reason)| {
-                acc.entry(*reason).or_insert_with(Vec::new).push(name);
+            .fold(BTreeMap::<_, Vec<_>>::default(), |mut acc, (name, reason)| {
+                acc.entry(*reason).or_default().push(name);
                 acc
             })
             .into_iter()
@@ -346,7 +346,7 @@ fn present_and_validate_dependencies(
     {
         let crate_names_for_manifest_updates = crates
             .iter()
-            .filter_map(|d| {
+            .filter(|d| {
                 matches!(
                     d.mode,
                     dependency::Mode::NotForPublishing {
@@ -354,8 +354,8 @@ fn present_and_validate_dependencies(
                         ..
                     }
                 )
-                .then(|| d.package.name.as_str())
             })
+            .map(|d| d.package.name.as_str())
             .collect::<Vec<_>>();
         if !crate_names_for_manifest_updates.is_empty() {
             let plural_s = (crate_names_for_manifest_updates.len() > 1)
@@ -448,7 +448,9 @@ fn perform_release(ctx: &Context, options: Options, crates: &[Dependency<'_>]) -
             release_section_by_publishee
                 .get(&publishee.name.as_str())
                 .and_then(|s| section_to_string(s, WriteMode::GitHubRelease, options.capitalize_commit))
-                .map(|release_notes| github::create_release(publishee, new_version, &release_notes, options.clone(), &ctx.base))
+                .map(|release_notes| {
+                    github::create_release(publishee, new_version, &release_notes, options.clone(), &ctx.base)
+                })
                 .transpose()?;
         }
     }
