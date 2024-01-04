@@ -1,7 +1,7 @@
 pub mod release {
     use crate::changelog::section::segment;
 
-    #[derive(Debug, Clone, Copy)]
+    #[derive(Debug, Clone)]
     pub struct Options {
         pub dry_run: bool,
         pub allow_dirty: bool,
@@ -26,6 +26,7 @@ pub mod release {
         pub changelog_links: bool,
         pub allow_changelog_github_release: bool,
         pub capitalize_commit: bool,
+        pub registry: Option<String>,
     }
 }
 #[path = "release/mod.rs"]

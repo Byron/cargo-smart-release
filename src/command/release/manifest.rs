@@ -42,7 +42,7 @@ pub(in crate::command::release_impl) fn edit_version_and_fixup_dependent_crates_
         release_section_by_publishee,
         mut made_change,
     } = changelog
-        .then(|| gather_changelog_data(ctx, &crates_and_versions_to_be_published, opts))
+        .then(|| gather_changelog_data(ctx, &crates_and_versions_to_be_published, opts.clone()))
         .transpose()?
         .unwrap_or_default();
 
@@ -72,7 +72,7 @@ pub(in crate::command::release_impl) fn edit_version_and_fixup_dependent_crates_
             possibly_new_version,
             &crates_with_version_change,
             lock,
-            opts,
+            opts.clone(),
         )?;
     }
 
@@ -88,10 +88,10 @@ pub(in crate::command::release_impl) fn edit_version_and_fixup_dependent_crates_
         would_stop_release,
         locks_by_manifest_path.len(),
         &pending_changelogs,
-        opts,
+        opts.clone(),
     );
 
-    preview_changelogs(ctx, &pending_changelogs, opts)?;
+    preview_changelogs(ctx, &pending_changelogs, opts.clone())?;
 
     let bail_message = commit_locks_and_generate_bail_message(
         ctx,
@@ -99,7 +99,7 @@ pub(in crate::command::release_impl) fn edit_version_and_fixup_dependent_crates_
         locks_by_manifest_path,
         changelog_ids_with_statistical_segments_only,
         changelog_ids_probably_lacking_user_edits,
-        opts,
+        opts.clone(),
     )?;
 
     let res = git::commit_changes(commit_message, dry_run, !made_change, &ctx.base)?;

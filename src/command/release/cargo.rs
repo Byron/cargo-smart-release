@@ -16,6 +16,7 @@ pub(in crate::command::release_impl) fn publish_crate(
         allow_dirty,
         no_verify,
         verbose,
+        registry,
         ..
     }: Options,
 ) -> anyhow::Result<()> {
@@ -28,6 +29,10 @@ pub(in crate::command::release_impl) fn publish_crate(
     for attempt in 1..=max_attempts {
         let mut c = Command::new("cargo");
         c.arg("publish");
+
+        if let Some(ref registry) = registry {
+            c.arg("--registry").arg(registry);
+        }
 
         if allow_dirty {
             c.arg("--allow-dirty");

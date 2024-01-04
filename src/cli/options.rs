@@ -145,6 +145,10 @@ pub enum SubCommands {
         #[clap(long, visible_alias = "only", help_heading = Some("CUSTOMIZATION"))]
         no_dependencies: bool,
 
+        /// Alternative registry to publish to.
+        #[clap(long, help_heading = Some("CUSTOMIZATION"))]
+        registry: Option<String>,
+
         /// Pass --no-verify to 'cargo publish' which should only be a last resort when fixing up packages that
         /// otherwise wouldn't publish, but need to be publish to resolve the situation.
         #[clap(long, help_heading = Some("EXPERT"))]
