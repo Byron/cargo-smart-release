@@ -91,14 +91,14 @@ impl From<Options> for traverse::Options {
 
 fn release_depth_first(ctx: Context, opts: Options) -> anyhow::Result<()> {
     let crates = {
-        traverse::dependencies(&ctx.base, opts.into())
-            .and_then(|crates| assure_crates_index_is_uptodate(crates, &ctx.base, opts.into()))
+        traverse::dependencies(&ctx.base, opts.clone().into())
+            .and_then(|crates| assure_crates_index_is_uptodate(crates, &ctx.base, opts.clone().into()))
             .and_then(|crates| {
                 present_and_validate_dependencies(&crates, &ctx, opts.verbose, opts.dry_run).map(|_| crates)
             })?
     };
 
-    assure_working_tree_is_unchanged(opts)?;
+    assure_working_tree_is_unchanged(opts.clone())?;
     perform_release(&ctx, opts, &crates)?;
 
     Ok(())
@@ -399,7 +399,7 @@ fn perform_release(ctx: &Context, options: Options, crates: &[Dependency<'_>]) -
     let manifest::Outcome {
         commit_id,
         section_by_package: release_section_by_publishee,
-    } = manifest::edit_version_and_fixup_dependent_crates_and_handle_changelog(crates, options, ctx)?;
+    } = manifest::edit_version_and_fixup_dependent_crates_and_handle_changelog(crates, options.clone(), ctx)?;
 
     let should_publish_to_github = options.allow_changelog_github_release
         && if Program::named("gh").found {
@@ -414,7 +414,7 @@ fn perform_release(ctx: &Context, options: Options, crates: &[Dependency<'_>]) -
     let prevent_default_members = ctx.base.meta.workspace_members.len() > 1;
     for (publishee, new_version) in crates.iter().filter_map(try_to_published_crate_and_new_version) {
         if let Some((crate_, version)) = successful_publishees_and_version.last() {
-            if let Err(err) = wait_for_release(crate_, version, options) {
+            if let Err(err) = wait_for_release(crate_, version, options.clone()) {
                 log::warn!(
                     "Failed to wait for crates-index update - trying to publish '{} v{}' anyway: {}.",
                     publishee.name,
@@ -424,7 +424,7 @@ fn perform_release(ctx: &Context, options: Options, crates: &[Dependency<'_>]) -
             }
         }
 
-        if let Err(err) = cargo::publish_crate(publishee, prevent_default_members, options) {
+        if let Err(err) = cargo::publish_crate(publishee, prevent_default_members, options.clone()) {
             publish_err = Some(err);
             break;
         }
@@ -437,18 +437,18 @@ fn perform_release(ctx: &Context, options: Options, crates: &[Dependency<'_>]) -
                 .get(&publishee.name.as_str())
                 .and_then(|s| section_to_string(s, WriteMode::Tag, options.capitalize_commit)),
             &ctx.base,
-            options,
+            options.clone(),
         )? {
             tag_names.push(tag_name);
         }
     }
-    git::push_tags_and_head(&ctx.base.repo, &tag_names, options)?;
+    git::push_tags_and_head(&ctx.base.repo, &tag_names, options.clone())?;
     if should_publish_to_github {
         for (publishee, new_version) in successful_publishees_and_version {
             release_section_by_publishee
                 .get(&publishee.name.as_str())
                 .and_then(|s| section_to_string(s, WriteMode::GitHubRelease, options.capitalize_commit))
-                .map(|release_notes| github::create_release(publishee, new_version, &release_notes, options, &ctx.base))
+                .map(|release_notes| github::create_release(publishee, new_version, &release_notes, options.clone(), &ctx.base))
                 .transpose()?;
         }
     }

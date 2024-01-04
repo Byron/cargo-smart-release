@@ -161,6 +161,10 @@ pub enum SubCommands {
         /// Capitalize commit messages.
         #[clap(long, help_heading = Some("CHANGELOG"))]
         capitalize_commit: bool,
+
+        /// Alternative registry to publish to
+        #[clap(long, help_heading = Some("REGISTRY"))]
+        registry: Option<String>,
     },
     #[clap(name = "changelog", version = option_env!("CARGO_SMART_RELEASE_VERSION"))]
     /// Generate changelogs from commit histories, non-destructively.
