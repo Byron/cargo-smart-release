@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.3 (2024-01-04)
+
+### New Features
+
+ - <csr-id-4c7b6d20399480da6797fb42b954d40d316c85f3/> Support for custom registries with the `--registry <REG-URL>` flag.
+   Please note that this information is
+   merely passed to `cargo publish --registry <REG-URL>`.
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 7 commits contributed to the release.
+ - 83 days passed between releases.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Thanks Clippy
+
+<csr-read-only-do-not-edit/>
+
+[Clippy](https://github.com/rust-lang/rust-clippy) helped 1 time to make code idiomatic. 
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Support for custom registries with the `--registry <REG-URL>` flag. ([`4c7b6d2`](https://github.com/Byron/cargo-smart-release/commit/4c7b6d20399480da6797fb42b954d40d316c85f3))
+    - Upgrade gix to latest version ([`86113bf`](https://github.com/Byron/cargo-smart-release/commit/86113bf58f9303f113d0baba41fb58e6a459e861))
+    - Update dependencies ([`168cf48`](https://github.com/Byron/cargo-smart-release/commit/168cf484a2ebd23c174536a59de2dc6172b0e0ce))
+    - Upgrade dependencies ([`1071dba`](https://github.com/Byron/cargo-smart-release/commit/1071dbaac051f47ed17d8fa1843fd194ce839a68))
+    - Refactor ([`f9df11f`](https://github.com/Byron/cargo-smart-release/commit/f9df11f681f634d566ff3c106e20a142f242a91a))
+    - Thanks clippy ([`40eae8d`](https://github.com/Byron/cargo-smart-release/commit/40eae8d4e9ecbb54bfd282bf06a17a57837d9b9d))
+    - 🍮 Support for custom registries ([`3abb6df`](https://github.com/Byron/cargo-smart-release/commit/3abb6dfd48b0b5c6c898b44b47b3dfbb62f15b00))
+</details>
+
 ## 0.21.2 (2023-10-12)
 
 ### Bug Fixes
@@ -17,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 12 commits contributed to the release over the course of 51 calendar days.
+ - 13 commits contributed to the release over the course of 51 calendar days.
  - 51 days passed between releases.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -35,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release cargo-smart-release v0.21.2 ([`82c39db`](https://github.com/Byron/cargo-smart-release/commit/82c39dbc57b755978ec37997642513992a72e292))
     - Assure we find the highest available version when picking the next version. ([`1236efa`](https://github.com/Byron/cargo-smart-release/commit/1236efa69e313ea22352397424eaafa8f630c5df))
     - Thanks clippy ([`2ee59e1`](https://github.com/Byron/cargo-smart-release/commit/2ee59e1843d59f1c4ed75e968d5e2409c9996e9a))
     - Upgrade cargo-metadata to latest version ([`e6e6f75`](https://github.com/Byron/cargo-smart-release/commit/e6e6f75b1b31109577e0d6407f605f9629fbb6cd))

@@ -153,7 +153,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-smart-release"
-version = "0.21.2"
+version = "0.21.3"
 dependencies = [
  "anyhow",
  "bitflags 2.4.1",
