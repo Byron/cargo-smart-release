@@ -5,8 +5,9 @@ use options::{Args, SubCommands};
 use cargo_smart_release::command;
 
 fn main() -> anyhow::Result<()> {
-    gix::interrupt::init_handler(2, || {})?;
     unsafe {
+        // SAFETY: We do nothing that could block.
+        gix::interrupt::init_handler(2, || {})?;
         // SAFETY: we don't manipulate the environment from any thread
         time::util::local_offset::set_soundness(time::util::local_offset::Soundness::Unsound);
     }
@@ -63,7 +64,7 @@ fn main() -> anyhow::Result<()> {
             no_dependencies,
             no_isolate_dependencies_from_breaking_changes,
             capitalize_commit,
-            registry
+            registry,
         } => {
             let verbose = execute || verbose;
             init_logging(verbose);
@@ -91,7 +92,7 @@ fn main() -> anyhow::Result<()> {
                     changelog_links: !no_changelog_links,
                     allow_changelog_github_release: !no_changelog_github_release,
                     capitalize_commit,
-                    registry
+                    registry,
                 },
                 crates,
                 to_bump_spec(bump.as_deref().unwrap_or(DEFAULT_BUMP_SPEC))?,

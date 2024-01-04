@@ -29,9 +29,8 @@ pub fn change_since_last_release(package: &Package, ctx: &crate::Context) -> any
         Some(r) => r,
     };
     let repo_relative_crate_dir = ctx.repo_relative_path(package);
-    Ok(match ctx.repo.head()?.into_fully_peeled_id() {
-        Some(c) => {
-            let current_commit = c?;
+    Ok(match ctx.repo.head()?.try_into_peeled_id()? {
+        Some(current_commit) => {
             let released_target = tag_ref.peel_to_id_in_place()?;
 
             match repo_relative_crate_dir

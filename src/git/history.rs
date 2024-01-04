@@ -5,7 +5,6 @@ use std::{
     path::PathBuf,
 };
 
-use anyhow::bail;
 use cargo_metadata::Package;
 use gix::{
     bstr::ByteSlice,
@@ -30,18 +29,22 @@ pub enum SegmentScope {
 }
 
 pub fn collect(repo: &gix::Repository) -> anyhow::Result<Option<commit::History>> {
+    use anyhow::Context;
     let mut handle = repo.clone();
     handle.object_cache_size(64 * 1024);
-    let reference = match handle.head()?.peeled()?.kind {
-        head::Kind::Detached { .. } => bail!("Refusing to operate on a detached head."),
+    let mut head = handle.head()?;
+    let id = head
+        .try_peel_to_id_in_place()?
+        .context("Refusing to operate on a detached head.")?;
+    let reference = match head.kind {
+        head::Kind::Detached { .. } => unreachable!("handled above"),
         head::Kind::Unborn { .. } => return Ok(None),
         head::Kind::Symbolic(r) => r.attach(&handle),
     };
 
     let mut items = Vec::new();
     let mut data_by_tree_id = HashMap::default();
-    for commit_id in reference
-        .id()
+    for commit_id in id
         .ancestors()
         .sorting(gix::traverse::commit::Sorting::ByCommitTimeNewestFirst)
         .use_commit_graph(false)
