@@ -35,10 +35,10 @@ pub fn collect(repo: &gix::Repository) -> anyhow::Result<Option<commit::History>
     let mut head = handle.head()?;
     let id = head
         .try_peel_to_id_in_place()?
-        .context("Refusing to operate on a detached head.")?;
+        .context("Refusing to operate on a unborn head.")?;
     let reference = match head.kind {
-        head::Kind::Detached { .. } => unreachable!("handled above"),
-        head::Kind::Unborn { .. } => return Ok(None),
+        head::Kind::Detached { .. } => return Ok(None),
+        head::Kind::Unborn { .. } => unreachable!("handled above"),
         head::Kind::Symbolic(r) => r.attach(&handle),
     };
 
