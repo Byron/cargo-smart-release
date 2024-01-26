@@ -57,10 +57,7 @@ pub fn change_since_last_release(package: &Package, ctx: &crate::Context) -> any
                         let released_dir_id = released_dir_entry.object_id();
                         (released_dir_id != current_dir_id).then_some(PackageChangeKind::ChangedOrNew)
                     } else {
-                        log::warn!(
-                            "Expected path '{}' to exist in the last released commit `{}` but it doesn't. Was it moved from a different directory? The generated changelog may miss some changes.",
-                            dir, released_target
-                        );
+                        log::warn!("Expected path '{dir}' to exist in the last released commit `{released_target}` but it doesn't. Was it moved from a different directory? The generated changelog may miss some changes.");
                         Some(PackageChangeKind::ChangedOrNew)
                     }
                 }
