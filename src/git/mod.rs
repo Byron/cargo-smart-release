@@ -48,20 +48,18 @@ pub fn change_since_last_release(package: &Package, ctx: &crate::Context) -> any
                         .peel_to_entry(components.clone())?
                         .unwrap_or_else(|| panic!("path '{}' must exist in current_commit `{}`", dir, current_commit))
                         .object_id();
-                    let released_dir_id = released_target
+                    if let Some(released_dir_entry) = released_target
                         .object()?
                         .peel_to_kind(object::Kind::Tree)?
                         .into_tree()
                         .peel_to_entry(components)?
-                        .unwrap_or_else(|| {
-                            panic!(
-                                "path '{}' in released_target commit `{}` must exist as it was supposedly released there. Was it moved to a different directory?",
-                                dir, released_target
-                            )
-                        })
-                        .object_id();
-
-                    (released_dir_id != current_dir_id).then_some(PackageChangeKind::ChangedOrNew)
+                    {
+                        let released_dir_id = released_dir_entry.object_id();
+                        (released_dir_id != current_dir_id).then_some(PackageChangeKind::ChangedOrNew)
+                    } else {
+                        log::warn!("Expected path '{dir}' to exist in the last released commit `{released_target}` but it doesn't. Was it moved from a different directory? The generated changelog may miss some changes.");
+                        Some(PackageChangeKind::ChangedOrNew)
+                    }
                 }
             }
         }
