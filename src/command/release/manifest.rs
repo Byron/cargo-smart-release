@@ -67,6 +67,15 @@ pub(in crate::command::release_impl) fn edit_version_and_fixup_dependent_crates_
                 None,
             )?),
         };
+        log::trace!("Updating {}", package.name);
+        log::trace!(
+            "Crates that may change {}",
+            crates_with_version_change
+                .iter()
+                .map(|(p, _)| p.name.clone())
+                .collect::<Vec<_>>()
+                .join(", ")
+        );
         made_change |= set_version_and_update_package_dependency(
             package,
             possibly_new_version,
@@ -574,10 +583,21 @@ fn set_version_and_update_package_dependency(
 fn find_dependency_tables(
     root: &mut toml_edit::Table,
 ) -> impl Iterator<Item = (&mut dyn toml_edit::TableLike, Cow<'_, str>)> + '_ {
-    const DEP_TABLES: &[&str] = &["dependencies", "dev-dependencies", "build-dependencies"];
+    const DEP_TABLES: &[&str] = &["dependencies", "dev-dependencies", "build-dependencies", "workspace"];
 
     root.iter_mut()
         .flat_map(|(k, v)| match DEP_TABLES.iter().find(|dtn| *dtn == &k.get()) {
+            Some(dtn) if *dtn == "workspace" => {
+                if let Some(deps) = v.get_mut("dependencies") {
+                    log::trace!("Found workspace dependencies");
+                    deps.as_table_like_mut()
+                        .into_iter()
+                        .map(|t| (t, "workspace-dependencies".into()))
+                        .collect::<Vec<_>>()
+                } else {
+                    Vec::new()
+                }
+            }
             Some(dtn) => v
                 .as_table_like_mut()
                 .into_iter()
