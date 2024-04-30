@@ -12,8 +12,7 @@ use semver::{Version, VersionReq};
 
 use super::{cargo, git, Context, Options};
 use crate::{
-    changelog,
-    changelog::{write::Linkables, Section},
+    changelog::{self, write::Linkables, Section},
     traverse::Dependency,
     utils::{names_and_versions, try_to_published_crate_and_new_version, version_req_unset_or_default, will},
     version, ChangeLog,
@@ -68,6 +67,7 @@ pub(in crate::command::release_impl) fn edit_version_and_fixup_dependent_crates_
             )?),
         };
         made_change |= set_version_and_update_package_dependency(
+            ctx,
             package,
             possibly_new_version,
             &crates_with_version_change,
@@ -494,6 +494,7 @@ fn gather_changelog_data<'meta>(
 }
 
 fn set_version_and_update_package_dependency(
+    ctx: &Context,
     package_to_update: &Package,
     new_package_version: Option<&semver::Version>,
     crates: &[(&Package, &semver::Version)],
@@ -507,61 +508,51 @@ fn set_version_and_update_package_dependency(
     let mut doc = toml_edit::Document::from_str(&manifest)?;
 
     if let Some(new_version) = new_package_version {
-        let new_version = new_version.to_string();
-        if doc["package"]["version"].as_str() != Some(new_version.as_str()) {
+        let new_version_string = new_version.to_string();
+        if doc["package"]["version"].as_str() != Some(new_version_string.as_str()) {
             log::trace!(
                 "Pending '{}' manifest version update: \"{}\"",
                 package_to_update.name,
-                new_version
+                new_version_string
             );
-            doc["package"]["version"] = toml_edit::value(new_version);
-        }
-    }
-    for (dep_table, dep_type) in find_dependency_tables(&mut doc) {
-        for (name_to_find, new_version) in crates.iter().map(|(p, nv)| (&p.name, nv)) {
-            for name_to_find in package_to_update
-                .dependencies
-                .iter()
-                .filter(|dep| &dep.name == name_to_find)
-                .map(|dep| dep.rename.as_ref().unwrap_or(&dep.name))
-            {
-                if let Some(current_version_req) = dep_table
-                    .get_mut(name_to_find)
-                    .and_then(toml_edit::Item::as_inline_table_mut)
-                    .and_then(|name_table| name_table.get_mut("version"))
-                {
-                    let version_req = VersionReq::parse(current_version_req.as_str().expect("versions are strings"))?;
-                    let force_update = conservative_pre_release_version_handling
-                        && version::is_pre_release(new_version) // setting the lower bound unnecessarily can be harmful
-                        // don't claim to be conservative if this is necessary anyway
-                        && req_as_version(&version_req).map_or(false, |req_version|!version::rhs_is_breaking_bump_for_lhs(&req_version, new_version));
-                    if !version_req.matches(new_version) || force_update {
-                        if !version_req_unset_or_default(&version_req) {
-                            bail!(
-                                "{} has it's {} dependency set to a version requirement with comparator {} - cannot currently handle that.",
-                                package_to_update.name,
-                                name_to_find,
-                                current_version_req
-                            );
-                        }
-                        let new_version = format!("^{new_version}");
-                        if version_req.to_string() != new_version {
-                            log::trace!(
-                                "Pending '{}' {}manifest {} update: '{} = \"{}\"' (from {})",
-                                package_to_update.name,
-                                if force_update { "conservative " } else { "" },
-                                dep_type,
-                                name_to_find,
-                                new_version,
-                                current_version_req.to_string()
-                            );
-                        }
-                        *current_version_req = toml_edit::Value::from(new_version.as_str());
+            doc["package"]["version"] = toml_edit::value(new_version_string.clone());
+
+            // Ensure workspace root is updated if necessary TODO: see if this is specified in non-monorepos, and compare
+            let wr_path = ctx.base.meta.workspace_root.join("Cargo.toml");
+            // Update workspace dependency if specified
+            if let Ok(manifest) = std::fs::read_to_string(&wr_path) {
+                let mut workspace_doc = toml_edit::Document::from_str(&manifest)?;
+                for (dep_table, dep_type) in find_dependency_tables(&mut workspace_doc) {
+                    if let Some(current_version_req) = dep_table
+                        .get_mut(&package_to_update.name)
+                        .and_then(toml_edit::Item::as_inline_table_mut)
+                        .and_then(|name_table| name_table.get_mut("version"))
+                    {
+                        update_dependency(
+                            current_version_req,
+                            conservative_pre_release_version_handling,
+                            new_version,
+                            package_to_update,
+                            &package_to_update.name,
+                            &dep_type,
+                        )?;
                     }
                 }
+
+                // TODO: use the workspace lock, this commits even if --execute is not set
+                let new_manifest = workspace_doc.to_string();
+                std::fs::write(wr_path, new_manifest)?;
             }
         }
     }
+
+    update_dependency_tables(
+        &mut doc,
+        crates,
+        package_to_update,
+        conservative_pre_release_version_handling,
+    )?;
+
     let new_manifest = doc.to_string();
     out.write_all(new_manifest.as_bytes())?;
 
@@ -574,10 +565,20 @@ fn set_version_and_update_package_dependency(
 fn find_dependency_tables(
     root: &mut toml_edit::Table,
 ) -> impl Iterator<Item = (&mut dyn toml_edit::TableLike, Cow<'_, str>)> + '_ {
-    const DEP_TABLES: &[&str] = &["dependencies", "dev-dependencies", "build-dependencies"];
+    const DEP_TABLES: &[&str] = &["dependencies", "dev-dependencies", "build-dependencies", "workspace"];
 
     root.iter_mut()
         .flat_map(|(k, v)| match DEP_TABLES.iter().find(|dtn| *dtn == &k.get()) {
+            Some(dtn) if *dtn == "workspace" => {
+                if let Some(deps) = v.get_mut("dependencies") {
+                    deps.as_table_like_mut()
+                        .into_iter()
+                        .map(|t| (t, "workspace-dependencies".into()))
+                        .collect::<Vec<_>>()
+                } else {
+                    Vec::new()
+                }
+            }
             Some(dtn) => v
                 .as_table_like_mut()
                 .into_iter()
@@ -615,4 +616,78 @@ fn req_as_version(req: &VersionReq) -> Option<Version> {
         pre: comp.pre.clone(),
         build: Default::default(),
     })
+}
+
+fn update_dependency_tables(
+    doc: &mut toml_edit::Table,
+    crates: &[(&Package, &semver::Version)],
+    package_to_update: &Package,
+    conservative_pre_release_version_handling: bool,
+) -> anyhow::Result<()> {
+    for (dep_table, dep_type) in find_dependency_tables(doc) {
+        for (name_to_find, new_version) in crates.iter().map(|(p, nv)| (&p.name, nv)) {
+            for name_to_find in package_to_update
+                .dependencies
+                .iter()
+                .filter(|dep| &dep.name == name_to_find)
+                .map(|dep| dep.rename.as_ref().unwrap_or(&dep.name))
+            {
+                if let Some(current_version_req) = dep_table
+                    .get_mut(name_to_find)
+                    .and_then(toml_edit::Item::as_inline_table_mut)
+                    .and_then(|name_table| name_table.get_mut("version"))
+                {
+                    update_dependency(
+                        current_version_req,
+                        conservative_pre_release_version_handling,
+                        new_version,
+                        package_to_update,
+                        name_to_find,
+                        &dep_type,
+                    )?;
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
+fn update_dependency(
+    current_version_req: &mut toml_edit::Value,
+    conservative_pre_release_version_handling: bool,
+    new_version: &Version,
+    package_to_update: &Package,
+    name_to_find: &str,
+    dep_type: &str,
+) -> anyhow::Result<()> {
+    let version_req = VersionReq::parse(current_version_req.as_str().expect("versions are strings"))?;
+    let force_update = conservative_pre_release_version_handling
+        && version::is_pre_release(new_version) // setting the lower bound unnecessarily can be harmful
+        // don't claim to be conservative if this is necessary anyway
+        && req_as_version(&version_req).map_or(false, |req_version|!version::rhs_is_breaking_bump_for_lhs(&req_version, new_version));
+
+    if !version_req.matches(new_version) || force_update {
+        if !version_req_unset_or_default(&version_req) {
+            bail!(
+            "{} has it's {} dependency set to a version requirement with comparator {} - cannot currently handle that.",
+            package_to_update.name,
+            name_to_find,
+            current_version_req
+        );
+        }
+        let new_version = format!("^{new_version}");
+        if version_req.to_string() != new_version {
+            log::trace!(
+                "Pending '{}' {}manifest {} update: '{} = \"{}\"' (from {})",
+                package_to_update.name,
+                if force_update { "conservative " } else { "" },
+                dep_type,
+                name_to_find,
+                new_version,
+                current_version_req.to_string()
+            );
+        }
+        *current_version_req = toml_edit::Value::from(new_version.as_str());
+    }
+    Ok(())
 }
