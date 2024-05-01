@@ -33,8 +33,9 @@ impl Context {
         bump_dependencies: BumpSpec,
         changelog: bool,
         changelog_links: bool,
+        registry: Option<String>,
     ) -> anyhow::Result<Self> {
-        let base = crate::Context::new(crate_names, changelog, bump, bump_dependencies)?;
+        let base = crate::Context::new(crate_names, changelog, bump, bump_dependencies, registry)?;
         let changelog_links = if changelog_links {
             crate::git::remote_url(&base.repo)?.map_or(Linkables::AsText, |url| Linkables::AsLinks {
                 repository_url: url.into(),
@@ -69,7 +70,14 @@ pub fn release(opts: Options, crates: Vec<String>, bump: BumpSpec, bump_dependen
         );
     }
 
-    let ctx = Context::new(crates, bump, bump_dependencies, allow_changelog, opts.changelog_links)?;
+    let ctx = Context::new(
+        crates,
+        bump,
+        bump_dependencies,
+        allow_changelog,
+        opts.changelog_links,
+        opts.registry.clone(),
+    )?;
     if !ctx.base.crates_index.exists() {
         log::warn!("Crates.io index doesn't exist. Consider using --update-crates-index to help determining if release versions are published already");
     }
