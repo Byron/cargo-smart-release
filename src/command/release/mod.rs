@@ -424,7 +424,7 @@ fn perform_release(ctx: &Context, options: Options, crates: &[Dependency<'_>]) -
         if let Some((crate_, version)) = successful_publishees_and_version.last() {
             if let Err(err) = wait_for_release(crate_, version, options.clone()) {
                 log::warn!(
-                    "Failed to wait for crates-index update - trying to publish '{} v{}' anyway: {}.",
+                    "Failed to wait for crates-index update - trying to publish '{} v{}' anyway: {:?}.",
                     publishee.name,
                     new_version,
                     err
