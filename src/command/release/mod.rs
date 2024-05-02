@@ -486,7 +486,12 @@ fn wait_for_release(
     let sleep_time = std::time::Duration::from_secs(1);
     let crate_version = crate_version.to_string();
 
-    log::info!("Waiting for '{} v{}' to arrive in index…", crate_.name, crate_version);
+    log::info!(
+        "Waiting for '{} v{}' to arrive in index for {:.0?}…",
+        crate_.name,
+        crate_version,
+        timeout
+    );
     let mut crates_index = crates_index::GitIndex::new_cargo_default()?;
     let mut attempt = 0;
     while start.elapsed() < timeout {
@@ -506,13 +511,17 @@ fn wait_for_release(
             .rev()
             .any(|version| version.version() == crate_version)
         {
-            break;
+            return Ok(());
         }
 
         std::thread::sleep(sleep_time);
         log::info!("attempt {}", attempt);
     }
-    Ok(())
+    Err(anyhow::anyhow!(
+        "Timed out waiting for'{} v{}' to arrive in the index",
+        crate_.name,
+        crate_version
+    ))
 }
 
 enum WriteMode {
