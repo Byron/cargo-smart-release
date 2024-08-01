@@ -46,7 +46,7 @@ pub fn collect(repo: &gix::Repository) -> anyhow::Result<Option<commit::History>
     let mut data_by_tree_id = HashMap::default();
     for commit_id in id
         .ancestors()
-        .sorting(gix::traverse::commit::Sorting::ByCommitTimeNewestFirst)
+        .sorting(gix::traverse::commit::simple::Sorting::ByCommitTimeNewestFirst)
         .use_commit_graph(false)
         .all()?
     {

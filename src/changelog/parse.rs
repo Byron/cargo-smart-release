@@ -14,7 +14,7 @@ use winnow::{
     combinator::{delimited, preceded, separated_pair, terminated},
     error::{FromExternalError, ParserError},
     prelude::*,
-    token::{tag, take_till, take_while},
+    token::{literal, take_till, take_while},
 };
 
 use crate::{
@@ -489,7 +489,7 @@ fn headline<'a, E: ParserError<&'a str> + FromExternalError<&'a str, ()>>(i: &mu
                         take_till(0.., char::is_whitespace)
                             .try_map(|v| semver::Version::parse(v).map_err(|_| ()).map(Some)),
                     ),
-                    tag(ascii::Caseless("unreleased")).map(|_| (None, None)),
+                    literal(ascii::Caseless("unreleased")).map(|_| (None, None)),
                 )),
             ),
             opt(preceded(
