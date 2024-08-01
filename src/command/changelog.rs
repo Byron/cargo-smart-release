@@ -104,7 +104,7 @@ pub fn changelog(opts: Options, crates: Vec<String>) -> anyhow::Result<()> {
         if let Some(bat) = bat.as_ref() {
             bat.display_to_tty(
                 lock.lock_path(),
-                lock.resource_path().strip_prefix(&ctx.root.to_path_buf())?,
+                lock.resource_path().strip_prefix(ctx.root.to_path_buf())?,
                 format!("PREVIEW {} / {}, press Ctrl+C to cancel", idx + 1, crates.len()),
             )?;
         }
@@ -141,11 +141,11 @@ fn assure_working_tree_is_unchanged(options: Options) -> anyhow::Result<()> {
         Ok(())
     } else {
         crate::git::assure_clean_working_tree().or_else(|err|
-            if options.dry_run {
-                log::warn!("The working tree has changes which will prevent changelog updates with --write unless --allow-dirty is also specified. The latter isn't recommended.");
-                Ok(())
-            } else {
-                Err(err)
-            })
+        if options.dry_run {
+            log::warn!("The working tree has changes which will prevent changelog updates with --write unless --allow-dirty is also specified. The latter isn't recommended.");
+            Ok(())
+        } else {
+            Err(err)
+        })
     }
 }

@@ -56,6 +56,7 @@ pub mod dependency {
         Breakage {
             bump: version::Bump,
             /// Set if there is a change at all, which might not be the case for previously skipped crates.
+            #[allow(dead_code)] // strange that this isn't used, indeed!
             change: Option<git::PackageChangeKind>,
             /// The direct dependency causing the breakage because it's breaking itself
             causing_dependency_names: Vec<String>,

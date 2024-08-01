@@ -14,7 +14,10 @@ pub mod history;
 
 #[derive(Clone, Debug)]
 pub enum PackageChangeKind {
-    Untagged { wanted_tag_name: String },
+    Untagged {
+        #[allow(dead_code)] // only used for debug printing maybe?
+        wanted_tag_name: String,
+    },
     ChangedOrNew,
 }
 

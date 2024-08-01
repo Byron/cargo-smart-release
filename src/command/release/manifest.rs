@@ -281,7 +281,7 @@ fn preview_changelogs(
             );
             bat.display_to_tty(
                 lock.lock_path(),
-                lock.resource_path().strip_prefix(&ctx.base.root.to_path_buf())?,
+                lock.resource_path().strip_prefix(ctx.base.root.to_path_buf())?,
                 additional_info,
             )?;
         }
@@ -534,7 +534,7 @@ fn set_version_and_update_package_dependency(
                     let force_update = conservative_pre_release_version_handling
                         && version::is_pre_release(new_version) // setting the lower bound unnecessarily can be harmful
                         // don't claim to be conservative if this is necessary anyway
-                        && req_as_version(&version_req).map_or(false, |req_version|!version::rhs_is_breaking_bump_for_lhs(&req_version, new_version));
+                        && req_as_version(&version_req).map_or(false, |req_version| !version::rhs_is_breaking_bump_for_lhs(&req_version, new_version));
                     if !version_req.matches(new_version) || force_update {
                         if !version_req_unset_or_default(&version_req) {
                             bail!(
