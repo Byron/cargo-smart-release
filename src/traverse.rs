@@ -375,7 +375,7 @@ fn forward_propagate_breaking_changes_for_publishing(
             break;
         }
 
-        previous_edits = edits.clone();
+        previous_edits.clone_from(&edits);
         for edit_for_publish in edits {
             edit_for_publish.apply(crates, ctx, bump_when_needed, allow_auto_publish_of_stable_crates)?;
         }

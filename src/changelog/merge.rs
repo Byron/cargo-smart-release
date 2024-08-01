@@ -56,7 +56,7 @@ impl ChangeLog {
                         } = &mut section_to_merge
                         {
                             *heading_level = first_release_indentation;
-                            *version_prefix = first_version_prefix.clone();
+                            version_prefix.clone_from(&first_version_prefix);
                         }
                         sections.insert(pos, section_to_merge);
                     }
