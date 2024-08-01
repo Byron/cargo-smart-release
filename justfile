@@ -21,7 +21,6 @@ clear-target:
 clippy *clippy-args:
     cargo clippy
 
-
 # Build all code in suitable configurations
 check:
     cargo check --all

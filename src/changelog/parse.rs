@@ -9,9 +9,7 @@ use gix::bstr::ByteSlice;
 use pulldown_cmark::{CowStr, Event, HeadingLevel, OffsetIter, Tag};
 use winnow::{
     ascii,
-    combinator::alt,
-    combinator::opt,
-    combinator::{delimited, preceded, separated_pair, terminated},
+    combinator::{alt, delimited, opt, preceded, separated_pair, terminated},
     error::{FromExternalError, ParserError},
     prelude::*,
     token::{literal, take_till, take_while},
