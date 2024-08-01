@@ -39,11 +39,11 @@ function init-git-repo() {
 title "changelog"
 (sandbox
   set-static-git-environment
-  export CARGO_HOME=$PWD
+  export CARGO_HOME="$(mktemp -t cargo-home.XXXXXX -d)"
 
   snapshot="$snapshot/triple-depth-workspace-changelog"
   cp -R $fixtures/tri-depth-workspace/* .
-  { echo $'target/\n.package-cache' > .gitignore && init-git-repo; } &>/dev/null
+  { echo $'target/' > .gitignore && init-git-repo; } &>/dev/null
 
   (when "interacting with 'a'"
     (with 'dry-run only'
@@ -69,7 +69,7 @@ title "changelog"
 title "smart-release"
 (sandbox
   set-static-git-environment
-  export CARGO_HOME=$PWD
+  export CARGO_HOME="$(mktemp -t cargo-home.XXXXXX -d)"
 
   snapshot="$snapshot/triple-depth-workspace"
   cp -R $fixtures/tri-depth-workspace/* .
