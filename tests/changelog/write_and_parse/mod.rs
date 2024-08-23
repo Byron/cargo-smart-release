@@ -18,7 +18,7 @@ fn conventional_write_empty_messages() -> Result {
         sections: vec![Section::Release {
             heading_level: 4,
             version_prefix: Section::DEFAULT_PREFIX.into(),
-            date: Some(time::OffsetDateTime::from_unix_timestamp(0)?),
+            date: Some(jiff::Timestamp::new(0, 0)?.to_zoned(jiff::tz::TimeZone::UTC)),
             name: changelog::Version::Semantic("1.0.2-beta.2".parse()?),
             removed_messages: vec![second_message],
             segments: vec![section::Segment::Conventional(section::segment::Conventional {
@@ -100,7 +100,7 @@ fn all_section_types_round_trips_lossy() -> Result {
                 heading_level: 4,
                 version_prefix: "".into(),
                 removed_messages: vec![],
-                date: Some(time::OffsetDateTime::from_unix_timestamp(0)?),
+                date: Some(jiff::Timestamp::new(0, 0)?.to_zoned(jiff::tz::TimeZone::UTC)),
                 name: changelog::Version::Semantic("1.0.2-beta.2".parse()?),
                 segments: vec![
                     section::Segment::User {
@@ -109,9 +109,9 @@ fn all_section_types_round_trips_lossy() -> Result {
                     section::Segment::Clippy(section::Data::Generated(section::segment::ThanksClippy { count: 42 })),
                     section::Segment::Statistics(section::Data::Generated(section::segment::CommitStatistics {
                         count: 100,
-                        duration: time::Duration::days(32).into(),
+                        duration: jiff::Span::new().days(32).into(),
                         conventional_count: 20,
-                        time_passed_since_last_release: Some(time::Duration::days(60)),
+                        time_passed_since_last_release: Some(jiff::Span::new().days(60)),
                         unique_issues: vec![
                             section::segment::details::Category::Issue("1".into()),
                             section::segment::details::Category::Uncategorized,

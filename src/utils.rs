@@ -7,7 +7,6 @@ use cargo_metadata::{
 };
 use gix::bstr::{BStr, ByteSlice};
 use semver::{Version, VersionReq};
-use time::OffsetDateTime;
 
 pub struct Program {
     pub found: bool,
@@ -157,10 +156,8 @@ pub fn component_to_bytes(c: Utf8Component<'_>) -> &[u8] {
     }
 }
 
-pub fn time_to_offset_date_time(time: gix::date::Time) -> OffsetDateTime {
-    time::OffsetDateTime::from_unix_timestamp(time.seconds)
-        .expect("always valid unix time")
-        .replace_offset(time::UtcOffset::from_whole_seconds(time.offset).expect("valid offset"))
+pub fn time_to_zoned_time(time: gix::date::Time) -> anyhow::Result<jiff::Zoned> {
+    Ok(jiff::Timestamp::new(time.seconds, 0)?.to_zoned(jiff::tz::Offset::from_seconds(time.offset)?.to_time_zone()))
 }
 
 #[cfg(test)]

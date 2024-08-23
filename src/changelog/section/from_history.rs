@@ -2,7 +2,6 @@ use std::{collections::BTreeMap, ops::Sub};
 
 use cargo_metadata::Package;
 use gix::prelude::ObjectIdExt;
-use time::OffsetDateTime;
 
 use crate::{
     changelog,
@@ -12,7 +11,7 @@ use crate::{
         Section,
     },
     commit, utils,
-    utils::{is_top_level_package, time_to_offset_date_time},
+    utils::{is_top_level_package, time_to_zoned_time},
 };
 
 impl Section {
@@ -91,12 +90,12 @@ impl Section {
             {
                 let duration = history
                     .last()
-                    .map(|last| date_time.sub(time_to_offset_date_time(last.commit_time)));
+                    .map(|last| date_time.sub(&time_to_zoned_time(last.commit_time).expect("valid time")));
                 segments.push(Segment::Statistics(section::Data::Generated(
                     section::segment::CommitStatistics {
                         count: history.len(),
                         duration,
-                        time_passed_since_last_release: prev_date_time.map(|prev_time| date_time.sub(prev_time)),
+                        time_passed_since_last_release: prev_date_time.map(|prev_time| date_time.sub(&prev_time)),
                         conventional_count: history.iter().filter(|item| item.message.kind.is_some()).count(),
                         unique_issues: {
                             let mut v = commits_by_category
@@ -158,7 +157,7 @@ impl Section {
     }
 }
 
-fn segment_head_time(segment: &commit::history::Segment<'_>, repo: &gix::Repository) -> OffsetDateTime {
+fn segment_head_time(segment: &commit::history::Segment<'_>, repo: &gix::Repository) -> jiff::Zoned {
     let time = segment
         .head
         .peeled
@@ -170,5 +169,5 @@ fn segment_head_time(segment: &commit::history::Segment<'_>, repo: &gix::Reposit
         .committer
         .time;
 
-    time_to_offset_date_time(time)
+    time_to_zoned_time(time).expect("always valid time")
 }

@@ -110,13 +110,13 @@ pub struct CommitStatistics {
     /// Amount of commits that contributed to the release
     pub count: usize,
     /// The time span from first to last commit, if there is more than one.
-    pub duration: Option<time::Duration>,
+    pub duration: Option<jiff::Span>,
     /// Amount of commits that could be parsed as git-conventional
     pub conventional_count: usize,
     /// The issue numbers that were referenced in commit messages
     pub unique_issues: Vec<details::Category>,
     /// The duration from the release before this one, if this isn't the first release.
-    pub time_passed_since_last_release: Option<time::Duration>,
+    pub time_passed_since_last_release: Option<jiff::Span>,
 }
 
 impl CommitStatistics {

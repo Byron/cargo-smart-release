@@ -8,8 +8,6 @@ fn main() -> anyhow::Result<()> {
     unsafe {
         // SAFETY: We do nothing that could block.
         gix::interrupt::init_handler(2, || {})?;
-        // SAFETY: we don't manipulate the environment from any thread
-        time::util::local_offset::set_soundness(time::util::local_offset::Soundness::Unsound);
     }
     let args: Args = Args::parse();
     match args.subcommands {

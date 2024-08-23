@@ -320,20 +320,20 @@ impl section::Segment {
                     count,
                     if *count == 1 { "commit" } else { "commits" },
                     match duration {
-                        Some(duration) if duration.whole_days() > 0 => format!(
+                        Some(duration) if duration.get_days() > 0 => format!(
                             " over the course of {} calendar {}.",
-                            duration.whole_days(),
-                            if duration.whole_days() == 1 { "day" } else { "days" }
+                            duration.get_days(),
+                            if duration.get_days() == 1 { "day" } else { "days" }
                         ),
                         _ => ".".into(),
                     }
                 )?;
-                if let Some(time_between_releases) = time_passed_since_last_release.filter(|d| d.whole_days() > 0) {
+                if let Some(time_between_releases) = time_passed_since_last_release.filter(|d| d.get_days() > 0) {
                     writeln!(
                         out,
                         " - {} {} passed between releases.",
-                        time_between_releases.whole_days(),
-                        if time_between_releases.whole_days() == 1 {
+                        time_between_releases.get_days(),
+                        if time_between_releases.get_days() == 1 {
                             "day"
                         } else {
                             "days"

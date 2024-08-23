@@ -459,7 +459,7 @@ struct Headline {
     level: usize,
     version_prefix: String,
     version: Option<semver::Version>,
-    date: Option<time::OffsetDateTime>,
+    date: Option<jiff::Zoned>,
 }
 
 impl<'a> TryFrom<&'a str> for Headline {
@@ -496,11 +496,9 @@ fn headline<'a, E: ParserError<&'a str> + FromExternalError<&'a str, ()>>(i: &mu
                     "(",
                     (take_n_digits(4), "-", take_n_digits(2), "-", take_n_digits(2)).try_map(
                         |(year, _, month, _, day)| {
-                            time::Month::try_from(month as u8).map_err(|_| ()).and_then(|month| {
-                                time::Date::from_calendar_date(year as i32, month, day as u8)
-                                    .map_err(|_| ())
-                                    .map(|d| d.midnight().assume_utc())
-                            })
+                            jiff::civil::Date::new(year as i16, month as i8, day as i8)
+                                .map_err(|_| ())
+                                .and_then(|d| d.to_zoned(jiff::tz::TimeZone::UTC).map_err(|_| ()))
                         },
                     ),
                     ")",
