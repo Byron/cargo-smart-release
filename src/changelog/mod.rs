@@ -26,7 +26,7 @@ pub enum Section {
     /// A segment describing a particular release
     Release {
         name: Version,
-        date: Option<time::OffsetDateTime>,
+        date: Option<jiff::Zoned>,
         /// the amount of # in front of the heading denoting the release name
         heading_level: usize,
         /// What came right before the version

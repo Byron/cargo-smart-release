@@ -2,6 +2,7 @@ mod from_history;
 pub mod segment;
 
 #[derive(Eq, PartialEq, Debug, Clone)]
+#[allow(clippy::large_enum_variant)]
 pub enum Segment {
     /// A portion of a Section that we couldn't make sense of, but which should be kept as is nonetheless.
     User {

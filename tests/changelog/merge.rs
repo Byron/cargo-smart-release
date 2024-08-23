@@ -3,7 +3,6 @@ use cargo_smart_release::{
     changelog::{section, Section},
     ChangeLog,
 };
-use time::OffsetDateTime;
 
 use crate::changelog::hex_to_id;
 
@@ -20,10 +19,9 @@ fn sections() {
                 version_prefix: "".into(),
                 removed_messages: vec![],
                 date: Some(
-                    time::Date::from_calendar_date(2021, time::Month::September, 14)
-                        .unwrap()
-                        .midnight()
-                        .assume_utc(),
+                    jiff::civil::date(2021, 9, 14)
+                        .to_zoned(jiff::tz::TimeZone::UTC)
+                        .unwrap(),
                 ),
                 name: changelog::Version::Semantic("1.0.0".parse().unwrap()),
                 segments: Vec::new(),
@@ -62,7 +60,7 @@ fn sections() {
                 unknown: Default::default(),
             },
             Section::Release {
-                date: date_m_d(time::Month::September, 15).into(), // generated has a date is 'correct'
+                date: date_m_d(9, 15).into(), // generated has a date is 'correct'
                 name: changelog::Version::Semantic("1.0.0".parse().unwrap()),
                 removed_messages: vec![],
                 heading_level: 2,
@@ -73,7 +71,7 @@ fn sections() {
                 unknown: Default::default(),
             },
             Section::Release {
-                date: date_m_d(time::Month::July, 1).into(), // generated has a date
+                date: date_m_d(7, 1).into(), // generated has a date
                 name: changelog::Version::Semantic("0.9.0".parse().unwrap()),
                 unknown: String::new(),
                 removed_messages: vec![],
@@ -84,7 +82,7 @@ fn sections() {
                 ))],
             },
             Section::Release {
-                date: date_m_d(time::Month::June, 1).into(),
+                date: date_m_d(6, 1).into(),
                 name: changelog::Version::Semantic("0.8.0".parse().unwrap()),
                 unknown: "undocumented".into(),
                 removed_messages: vec![],
@@ -120,10 +118,9 @@ fn sections() {
                     removed_messages: vec![],
                     version_prefix: "".into(),
                     date: Some(
-                        time::Date::from_calendar_date(2021, time::Month::September, 15)
-                            .unwrap()
-                            .midnight()
-                            .assume_utc(),
+                        jiff::civil::date(2021, 9, 15)
+                            .to_zoned(jiff::tz::TimeZone::UTC)
+                            .unwrap(),
                     ),
                     name: changelog::Version::Semantic("1.0.0".parse().unwrap()),
                     segments: vec![section::Segment::Clippy(section::Data::Generated(
@@ -136,7 +133,7 @@ fn sections() {
                     generated: false,
                 },
                 Section::Release {
-                    date: date_m_d(time::Month::July, 1).into(),
+                    date: date_m_d(7, 1).into(),
                     name: changelog::Version::Semantic("0.9.0".parse().unwrap()),
                     unknown: String::new(),
                     heading_level: 3,
@@ -147,7 +144,7 @@ fn sections() {
                     ))],
                 },
                 Section::Release {
-                    date: date_m_d(time::Month::June, 1).into(),
+                    date: date_m_d(6, 1).into(),
                     name: changelog::Version::Semantic("0.8.0".parse().unwrap()),
                     unknown: "undocumented".into(),
                     heading_level: 3,
@@ -172,7 +169,7 @@ fn segments() {
                 generated: false,
             },
             Section::Release {
-                date: date_m_d(time::Month::January, 1).into(),
+                date: date_m_d(1, 1).into(),
                 name: changelog::Version::Semantic("0.7.0".parse().unwrap()),
                 unknown: "".into(),
                 heading_level: 3,
@@ -211,10 +208,9 @@ fn segments() {
                 version_prefix: Section::DEFAULT_PREFIX.into(),
                 removed_messages: vec![],
                 date: Some(
-                    time::Date::from_calendar_date(2021, time::Month::September, 15)
-                        .unwrap()
-                        .midnight()
-                        .assume_utc(),
+                    jiff::civil::date(2021, 9, 15)
+                        .to_zoned(jiff::tz::TimeZone::UTC)
+                        .unwrap(),
                 ),
                 name: changelog::Version::Semantic("1.0.0".parse().unwrap()),
                 segments: vec![section::Segment::User {
@@ -223,7 +219,7 @@ fn segments() {
                 unknown: "".into(),
             },
             Section::Release {
-                date: date_m_d(time::Month::June, 1).into(),
+                date: date_m_d(6, 1).into(),
                 name: changelog::Version::Semantic("0.8.0".parse().unwrap()),
                 unknown: "".into(),
                 heading_level: 3,
@@ -291,17 +287,16 @@ fn segments() {
                 version_prefix: Section::DEFAULT_PREFIX.into(),
                 removed_messages: vec![],
                 date: Some(
-                    time::Date::from_calendar_date(2021, time::Month::September, 15)
-                        .unwrap()
-                        .midnight()
-                        .assume_utc(),
+                    jiff::civil::date(2021, 9, 15)
+                        .to_zoned(jiff::tz::TimeZone::UTC)
+                        .unwrap(),
                 ),
                 name: changelog::Version::Semantic("1.0.0".parse().unwrap()),
                 segments: segments.clone(),
                 unknown: "".into(),
             },
             Section::Release {
-                date: date_m_d(time::Month::June, 1).into(),
+                date: date_m_d(6, 1).into(),
                 name: changelog::Version::Semantic("0.8.0".parse().unwrap()),
                 unknown: "".into(),
                 heading_level: 3,
@@ -310,7 +305,7 @@ fn segments() {
                 segments: segments.clone(),
             },
             Section::Release {
-                date: date_m_d(time::Month::January, 1).into(),
+                date: date_m_d(1, 1).into(),
                 name: changelog::Version::Semantic("0.7.0".parse().unwrap()),
                 unknown: "".into(),
                 heading_level: 3,
@@ -334,7 +329,7 @@ fn segments() {
                     generated: false,
                 },
                 Section::Release {
-                    date: date_m_d(time::Month::January, 1).into(),
+                    date: date_m_d(1, 1).into(),
                     name: changelog::Version::Semantic("0.7.0".parse().unwrap()),
                     unknown: "".into(),
                     heading_level: 3,
@@ -378,10 +373,9 @@ fn segments() {
                     version_prefix: Section::DEFAULT_PREFIX.into(),
                     removed_messages: vec![],
                     date: Some(
-                        time::Date::from_calendar_date(2021, time::Month::September, 15)
-                            .unwrap()
-                            .midnight()
-                            .assume_utc(),
+                        jiff::civil::date(2021, 9, 15)
+                            .to_zoned(jiff::tz::TimeZone::UTC)
+                            .unwrap(),
                     ),
                     name: changelog::Version::Semantic("1.0.0".parse().unwrap()),
                     segments: {
@@ -397,7 +391,7 @@ fn segments() {
                     unknown: "".into(),
                 },
                 Section::Release {
-                    date: date_m_d(time::Month::June, 1).into(),
+                    date: date_m_d(6, 1).into(),
                     name: changelog::Version::Semantic("0.8.0".parse().unwrap()),
                     unknown: "".into(),
                     heading_level: 3,
@@ -410,9 +404,8 @@ fn segments() {
     )
 }
 
-fn date_m_d(month: time::Month, day: u8) -> OffsetDateTime {
-    time::Date::from_calendar_date(2021, month, day) // generated, correct date
+fn date_m_d(month: i8, day: i8) -> jiff::Zoned {
+    jiff::civil::date(2021, month, day)
+        .to_zoned(jiff::tz::TimeZone::UTC)
         .unwrap()
-        .midnight()
-        .assume_utc()
 }

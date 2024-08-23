@@ -387,7 +387,7 @@ fn gather_changelog_data<'meta>(
         release_section_by_publishee,
         made_change,
     } = &mut out;
-    let next_commit_date = crate::utils::time_to_offset_date_time(crate::git::author()?.time);
+    let next_commit_date = crate::utils::time_to_zoned_time(crate::git::author()?.time).expect("valid time");
     for (publishee, new_version) in crates_and_versions_to_be_published {
         let lock = gix::lock::File::acquire_to_update_resource(
             &publishee.manifest_path,
@@ -431,7 +431,7 @@ fn gather_changelog_data<'meta>(
                         );
                     }
                     *name = changelog::Version::Semantic((*new_version).to_owned());
-                    *date = Some(next_commit_date);
+                    *date = Some(next_commit_date.clone());
                     let recent_section = log.sections.remove(recent_idx);
                     match log
                         .sections
@@ -457,7 +457,7 @@ fn gather_changelog_data<'meta>(
                             recent_version
                         );
                     }
-                    *date = Some(next_commit_date);
+                    *date = Some(next_commit_date.clone());
                 }
                 changelog::Section::Verbatim { .. } => unreachable!("BUG: checked in prior function"),
             };
