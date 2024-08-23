@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.4 (2024-08-23)
+
+### Chore
+
+ - <csr-id-056d3065c49de523a1e06b845c270c1d175814d6/> upgrade `gix` to 0.66
+   This removes `time` from the dependency list and maybe makes installations work again.
+
+### New Features
+
+ - <csr-id-91120a312eb047c315f7d47f0fdeaf32e63d4a52/> allow changelog generation for moved crates, emit warning message
+ - <csr-id-8c45160f3bdf928ebe9549dad9f8d51f25b876f3/> improve error messages when path is not found in commit
+
+### Bug Fixes
+
+ - <csr-id-57f6e2b9d1239af965d0c4ad8a34bd5b52983dcd/> don't crash on detached heads
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 15 commits contributed to the release over the course of 210 calendar days.
+ - 231 days passed between releases.
+ - 4 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 1 unique issue was worked on: [#14](https://github.com/Byron/cargo-smart-release/issues/14)
+
+### Thanks Clippy
+
+<csr-read-only-do-not-edit/>
+
+[Clippy](https://github.com/rust-lang/rust-clippy) helped 1 time to make code idiomatic. 
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **[#14](https://github.com/Byron/cargo-smart-release/issues/14)**
+    - Don't crash on detached heads ([`57f6e2b`](https://github.com/Byron/cargo-smart-release/commit/57f6e2b9d1239af965d0c4ad8a34bd5b52983dcd))
+ * **Uncategorized**
+    - Merge branch 'upgrade-dependencies' ([`2d24694`](https://github.com/Byron/cargo-smart-release/commit/2d24694555438e0f5d17195167a17c1fa665f1cb))
+    - Replace `time` with `jiff` ([`6d318f8`](https://github.com/Byron/cargo-smart-release/commit/6d318f81735953892e43ecd17ab5ceb057493449))
+    - Upgrade `gix` to 0.66 ([`056d306`](https://github.com/Byron/cargo-smart-release/commit/056d3065c49de523a1e06b845c270c1d175814d6))
+    - Thanks clippy ([`46ea567`](https://github.com/Byron/cargo-smart-release/commit/46ea5671edc67c0d36a5f6a67446d2c9bba8a725))
+    - Adjust journey test expectations, hopefully cross-platform ([`cd2443d`](https://github.com/Byron/cargo-smart-release/commit/cd2443dd038658be84fbfc8264aa2abd066af34f))
+    - `just fmt` ([`459c9ce`](https://github.com/Byron/cargo-smart-release/commit/459c9ce3ce4085f80dd97aac401c9b2fbcf27442))
+    - Fix clippy ([`d00758b`](https://github.com/Byron/cargo-smart-release/commit/d00758ba0488530d7497ec56f508fff118805be1))
+    - Upgrade to latest `gix` ([`779ccca`](https://github.com/Byron/cargo-smart-release/commit/779ccca06293fcfb7d6801b1605c694d66bce964))
+    - Update `Cargo.lock` to fix breakage ([`58362a6`](https://github.com/Byron/cargo-smart-release/commit/58362a64761fed02d398df199b4e3429b9311f1e))
+    - Merge branch 'allow-moved-stuff' ([`d472a8d`](https://github.com/Byron/cargo-smart-release/commit/d472a8db86003c9e6caa10a53c7e021f7f062b60))
+    - Refactor ([`54e0a84`](https://github.com/Byron/cargo-smart-release/commit/54e0a84bdfdc4ed01973880c566fcd54d6419fd0))
+    - Allow changelog generation for moved crates, emit warning message ([`91120a3`](https://github.com/Byron/cargo-smart-release/commit/91120a312eb047c315f7d47f0fdeaf32e63d4a52))
+    - Merge pull request #13 from hydro-project/err-msg ([`b684fcb`](https://github.com/Byron/cargo-smart-release/commit/b684fcb7f01ad822d5a9ec26f255db1623f756e7))
+    - Improve error messages when path is not found in commit ([`8c45160`](https://github.com/Byron/cargo-smart-release/commit/8c45160f3bdf928ebe9549dad9f8d51f25b876f3))
+</details>
+
 ## 0.21.3 (2024-01-04)
 
 ### New Features
@@ -17,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 7 commits contributed to the release.
+ - 8 commits contributed to the release.
  - 83 days passed between releases.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -35,6 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release cargo-smart-release v0.21.3 ([`7892013`](https://github.com/Byron/cargo-smart-release/commit/7892013f41557d8df5390a6f2855bb5e79632fe6))
     - Support for custom registries with the `--registry <REG-URL>` flag. ([`4c7b6d2`](https://github.com/Byron/cargo-smart-release/commit/4c7b6d20399480da6797fb42b954d40d316c85f3))
     - Upgrade gix to latest version ([`86113bf`](https://github.com/Byron/cargo-smart-release/commit/86113bf58f9303f113d0baba41fb58e6a459e861))
     - Update dependencies ([`168cf48`](https://github.com/Byron/cargo-smart-release/commit/168cf484a2ebd23c174536a59de2dc6172b0e0ce))
