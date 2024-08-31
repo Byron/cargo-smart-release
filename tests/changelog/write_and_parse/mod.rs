@@ -109,9 +109,9 @@ fn all_section_types_round_trips_lossy() -> Result {
                     section::Segment::Clippy(section::Data::Generated(section::segment::ThanksClippy { count: 42 })),
                     section::Segment::Statistics(section::Data::Generated(section::segment::CommitStatistics {
                         count: 100,
-                        duration: jiff::Span::new().days(32).into(),
+                        duration: Some(32),
                         conventional_count: 20,
-                        time_passed_since_last_release: Some(jiff::Span::new().days(60)),
+                        time_passed_since_last_release: Some(60),
                         unique_issues: vec![
                             section::segment::details::Category::Issue("1".into()),
                             section::segment::details::Category::Uncategorized,

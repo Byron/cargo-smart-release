@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, ops::Sub};
+use std::collections::BTreeMap;
 
 use cargo_metadata::Package;
 use gix::prelude::ObjectIdExt;
@@ -88,14 +88,32 @@ impl Section {
                 .as_ref()
                 .filter(|_| selection.contains(Selection::COMMIT_STATISTICS))
             {
-                let duration = history
-                    .last()
-                    .map(|last| date_time.sub(&time_to_zoned_time(last.commit_time).expect("valid time")));
+                let duration = history.last().and_then(|last| {
+                    let first_commit_time = time_to_zoned_time(last.commit_time).expect("valid time");
+                    let span = date_time
+                        .since(
+                            jiff::ZonedDifference::new(&first_commit_time)
+                                .smallest(jiff::Unit::Day)
+                                .largest(jiff::Unit::Day),
+                        )
+                        .ok()?;
+                    Some(span.get_days())
+                });
+                let time_passed_since_last_release = prev_date_time.and_then(|prev_time| {
+                    let span = date_time
+                        .since(
+                            jiff::ZonedDifference::new(&prev_time)
+                                .smallest(jiff::Unit::Day)
+                                .largest(jiff::Unit::Day),
+                        )
+                        .ok()?;
+                    Some(span.get_days())
+                });
                 segments.push(Segment::Statistics(section::Data::Generated(
                     section::segment::CommitStatistics {
                         count: history.len(),
                         duration,
-                        time_passed_since_last_release: prev_date_time.map(|prev_time| date_time.sub(&prev_time)),
+                        time_passed_since_last_release,
                         conventional_count: history.iter().filter(|item| item.message.kind.is_some()).count(),
                         unique_issues: {
                             let mut v = commits_by_category
