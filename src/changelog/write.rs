@@ -328,16 +328,16 @@ impl section::Segment {
                         _ => ".".into(),
                     }
                 )?;
-                if let Some(time_between_releases) = time_passed_since_last_release.filter(|d| d.get_days() > 0) {
+                if let Some(days_between_releases) = time_passed_since_last_release
+                    .and_then(|d| d.total(jiff::Unit::Day).ok())
+                    .map(|d| d.floor() as u64)
+                    .filter(|d| *d > 0)
+                {
                     writeln!(
                         out,
                         " - {} {} passed between releases.",
-                        time_between_releases.get_days(),
-                        if time_between_releases.get_days() == 1 {
-                            "day"
-                        } else {
-                            "days"
-                        }
+                        days_between_releases,
+                        if days_between_releases == 1 { "day" } else { "days" }
                     )?;
                 }
                 writeln!(
