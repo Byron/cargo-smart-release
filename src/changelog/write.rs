@@ -320,19 +320,15 @@ impl section::Segment {
                     count,
                     if *count == 1 { "commit" } else { "commits" },
                     match duration {
-                        Some(duration) if duration.get_days() > 0 => format!(
+                        &Some(duration) if duration > 0 => format!(
                             " over the course of {} calendar {}.",
-                            duration.get_days(),
-                            if duration.get_days() == 1 { "day" } else { "days" }
+                            duration,
+                            if duration == 1 { "day" } else { "days" }
                         ),
                         _ => ".".into(),
                     }
                 )?;
-                if let Some(days_between_releases) = time_passed_since_last_release
-                    .and_then(|d| d.total(jiff::Unit::Day).ok())
-                    .map(|d| d.floor() as u64)
-                    .filter(|d| *d > 0)
-                {
+                if let Some(days_between_releases) = time_passed_since_last_release.filter(|d| *d > 0) {
                     writeln!(
                         out,
                         " - {} {} passed between releases.",
