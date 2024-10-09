@@ -102,7 +102,7 @@ pub(in crate::command::release_impl) fn edit_version_and_fixup_dependent_crates_
         opts.clone(),
     )?;
 
-    let res = git::commit_changes(commit_message, dry_run, !made_change, &ctx.base)?;
+    let res = git::commit_changes(commit_message, dry_run, !made_change, opts.signoff, &ctx.base)?;
     if let Some(bail_message) = bail_message {
         bail!(bail_message);
     } else {

@@ -27,6 +27,7 @@ pub mod release {
         pub allow_changelog_github_release: bool,
         pub capitalize_commit: bool,
         pub registry: Option<String>,
+        pub signoff: bool,
     }
 }
 #[path = "release/mod.rs"]

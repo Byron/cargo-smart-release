@@ -165,6 +165,10 @@ pub enum SubCommands {
         /// Capitalize commit messages.
         #[clap(long, help_heading = Some("CHANGELOG"))]
         capitalize_commit: bool,
+
+        /// Sign off commit messages.
+        #[clap(long, help_heading = Some("CUSTOMIZATION"))]
+        signoff: bool,
     },
     #[clap(name = "changelog", version = option_env!("CARGO_SMART_RELEASE_VERSION"))]
     /// Generate changelogs from commit histories, non-destructively.

@@ -174,6 +174,7 @@ dependencies = [
  "log",
  "pulldown-cmark",
  "semver",
+ "testing_logger",
  "toml_edit 0.21.1",
  "winnow 0.5.40",
 ]
@@ -2117,6 +2118,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755"
 dependencies = [
  "winapi-util",
+]
+
+[[package]]
+name = "testing_logger"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d92b727cb45d33ae956f7f46b966b25f1bc712092aeef9dba5ac798fc89f720"
+dependencies = [
+ "log",
 ]
 
 [[package]]

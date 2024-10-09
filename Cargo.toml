@@ -43,5 +43,6 @@ bitflags = "2"
 [dev-dependencies]
 insta = "1.8.0"
 gix-testtools = "0.15.0"
+testing_logger = "0.1.1"
 
 [workspace]
