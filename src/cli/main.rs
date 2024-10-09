@@ -63,6 +63,7 @@ fn main() -> anyhow::Result<()> {
             no_isolate_dependencies_from_breaking_changes,
             capitalize_commit,
             registry,
+            signoff,
         } => {
             let verbose = execute || verbose;
             init_logging(verbose);
@@ -91,6 +92,7 @@ fn main() -> anyhow::Result<()> {
                     allow_changelog_github_release: !no_changelog_github_release,
                     capitalize_commit,
                     registry,
+                    signoff,
                 },
                 crates,
                 to_bump_spec(bump.as_deref().unwrap_or(DEFAULT_BUMP_SPEC))?,

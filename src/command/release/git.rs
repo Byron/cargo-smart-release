@@ -11,6 +11,7 @@ pub(in crate::command::release_impl) fn commit_changes(
     message: impl AsRef<str>,
     dry_run: bool,
     empty_commit_possible: bool,
+    signoff: bool,
     ctx: &crate::Context,
 ) -> anyhow::Result<Option<Id<'_>>> {
     // TODO: replace with gitoxide one day
@@ -18,6 +19,9 @@ pub(in crate::command::release_impl) fn commit_changes(
     cmd.arg("commit").arg("-am").arg(message.as_ref());
     if empty_commit_possible {
         cmd.arg("--allow-empty");
+    }
+    if signoff {
+        cmd.arg("--signoff");
     }
     log::trace!("{} run {:?}", will(dry_run), cmd);
     if dry_run {
@@ -113,5 +117,56 @@ pub fn push_tags_and_head(
         Ok(())
     } else {
         bail!("'git push' invocation failed. Try to push manually and repeat the smart-release invocation to resume, possibly with --skip-push.");
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use log::Level;
+
+    use super::*;
+
+    #[test]
+    fn test_commit_changes() {
+        let ctx = crate::Context::new(
+            vec![],
+            false,
+            crate::version::BumpSpec::Auto,
+            crate::version::BumpSpec::Auto,
+        )
+        .unwrap();
+        let message = "commit message";
+        testing_logger::setup();
+        let _ = commit_changes(message, true, false, false, &ctx).unwrap();
+        testing_logger::validate(|captured_logs| {
+            assert_eq!(captured_logs.len(), 1);
+            assert_eq!(
+                captured_logs[0].body,
+                "WOULD run \"git\" \"commit\" \"-am\" \"commit message\""
+            );
+            assert_eq!(captured_logs[0].level, Level::Trace);
+        });
+    }
+
+    #[test]
+    fn test_commit_changes_with_signoff() {
+        let ctx = crate::Context::new(
+            vec![],
+            false,
+            crate::version::BumpSpec::Auto,
+            crate::version::BumpSpec::Auto,
+        )
+        .unwrap();
+        let message = "commit message";
+        testing_logger::setup();
+        let _ = commit_changes(message, true, false, true, &ctx).unwrap();
+        testing_logger::validate(|captured_logs| {
+            assert_eq!(captured_logs.len(), 1);
+            assert_eq!(
+                captured_logs[0].body,
+                "WOULD run \"git\" \"commit\" \"-am\" \"commit message\" \"--signoff\""
+            );
+            assert_eq!(captured_logs[0].level, Level::Trace);
+        });
     }
 }
