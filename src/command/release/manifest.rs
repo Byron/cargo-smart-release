@@ -525,11 +525,23 @@ fn set_version_and_update_package_dependency(
                 .filter(|dep| &dep.name == name_to_find)
                 .map(|dep| dep.rename.as_ref().unwrap_or(&dep.name))
             {
-                if let Some(current_version_req) = dep_table
+                let Some(name_table) = dep_table
                     .get_mut(name_to_find)
                     .and_then(toml_edit::Item::as_inline_table_mut)
-                    .and_then(|name_table| name_table.get_mut("version"))
-                {
+                else {
+                    continue;
+                };
+                if name_table.get("path").is_none() {
+                    log::trace!(
+                        "Skipping '{}' manifest {} update due as it's no local dependency: '{} = \"{}\"'",
+                        package_to_update.name,
+                        dep_type,
+                        name_to_find,
+                        new_version,
+                    );
+                    continue;
+                }
+                if let Some(current_version_req) = name_table.get_mut("version") {
                     let version_req = VersionReq::parse(current_version_req.as_str().expect("versions are strings"))?;
                     let force_update = conservative_pre_release_version_handling
                         && version::is_pre_release(new_version) // setting the lower bound unnecessarily can be harmful
