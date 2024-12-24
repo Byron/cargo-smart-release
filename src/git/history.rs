@@ -5,20 +5,20 @@ use std::{
     path::PathBuf,
 };
 
-use cargo_metadata::Package;
-use gix::{
-    bstr::ByteSlice,
-    head,
-    prelude::{ObjectIdExt, ReferenceExt},
-    Reference,
-};
-
 use crate::{
     commit,
     commit::history::{Item, Segment},
     git::strip_tag_path,
     utils::{component_to_bytes, is_tag_name, is_tag_version, tag_prefix},
     Context,
+};
+use cargo_metadata::Package;
+use gix::traverse::commit::simple::CommitTimeOrder;
+use gix::{
+    bstr::ByteSlice,
+    head,
+    prelude::{ObjectIdExt, ReferenceExt},
+    Reference,
 };
 
 pub enum SegmentScope {
@@ -46,7 +46,7 @@ pub fn collect(repo: &gix::Repository) -> anyhow::Result<Option<commit::History>
     let mut data_by_tree_id = HashMap::default();
     for commit_id in id
         .ancestors()
-        .sorting(gix::traverse::commit::simple::Sorting::ByCommitTimeNewestFirst)
+        .sorting(gix::revision::walk::Sorting::ByCommitTime(CommitTimeOrder::NewestFirst))
         .use_commit_graph(false)
         .all()?
     {

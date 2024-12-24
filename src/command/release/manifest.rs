@@ -504,7 +504,7 @@ fn set_version_and_update_package_dependency(
     }: Options,
 ) -> anyhow::Result<bool> {
     let manifest = std::fs::read_to_string(&package_to_update.manifest_path)?;
-    let mut doc = toml_edit::Document::from_str(&manifest)?;
+    let mut doc = toml_edit::DocumentMut::from_str(&manifest)?;
 
     if let Some(new_version) = new_package_version {
         let new_version = new_version.to_string();
