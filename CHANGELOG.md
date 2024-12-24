@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.21.6 (2024-12-24)
+
+### New Features
+
+ - <csr-id-32283ca6b868e18736ecfad0354219e6142d0932/> Add option to signoff git commits
+   Adds `cargo smart-release --signoff` to sign off git
+   commits.
+
+### Bug Fixes
+
+ - <csr-id-869b0bd5202465a891bae8830e817e07a6133df6/> don't crash when run on a detached `HEAD`
+   Instead, there will be a helpful error message.
+ - <csr-id-5a4a5227635168e1ace0ed4b8b163c6b29423c7b/> assure we only edit dependencies of local path dependencies.
+   Otherwise it would have been possible to set a crate-io dependency
+   to a version that wasn't yet published.
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 11 commits contributed to the release.
+ - 3 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 1 unique issue was worked on: [#34](https://github.com/Byron/cargo-smart-release/issues/34)
+
+### Thanks Clippy
+
+<csr-read-only-do-not-edit/>
+
+[Clippy](https://github.com/rust-lang/rust-clippy) helped 1 time to make code idiomatic. 
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **[#34](https://github.com/Byron/cargo-smart-release/issues/34)**
+    - Don't crash when run on a detached `HEAD` ([`869b0bd`](https://github.com/Byron/cargo-smart-release/commit/869b0bd5202465a891bae8830e817e07a6133df6))
+ * **Uncategorized**
+    - Upgrade all dependencies ([`8f3f794`](https://github.com/Byron/cargo-smart-release/commit/8f3f794658fe9b63b399e437894ca923896d0084))
+    - Update dependencies ([`b5c8259`](https://github.com/Byron/cargo-smart-release/commit/b5c825950ba2fa1497f92f5bb8481b0e03ab2c1e))
+    - Adjust test expectations, which are dependent on the Rust version now ([`f8c753d`](https://github.com/Byron/cargo-smart-release/commit/f8c753d8da3254427bb05bc3242fdca9b88cd777))
+    - Thanks clippy ([`4365aa5`](https://github.com/Byron/cargo-smart-release/commit/4365aa5928d25b5498e95ec89e994e58cd994a4b))
+    - Assure we only edit dependencies of local path dependencies. ([`5a4a522`](https://github.com/Byron/cargo-smart-release/commit/5a4a5227635168e1ace0ed4b8b163c6b29423c7b))
+    - Ignore new tests that are now failing on CI. ([`e9e5fbf`](https://github.com/Byron/cargo-smart-release/commit/e9e5fbfb86c0e8f02eebf9f80ff7aff54f3a4b31))
+    - Merge pull request #32 from dave-tucker/signoff ([`c498d29`](https://github.com/Byron/cargo-smart-release/commit/c498d29169457e57fc74b8234da2bbbcdecbdd10))
+    - Add option to signoff git commits ([`32283ca`](https://github.com/Byron/cargo-smart-release/commit/32283ca6b868e18736ecfad0354219e6142d0932))
+    - Merge branch 'ag/fix-day-span' ([`557f555`](https://github.com/Byron/cargo-smart-release/commit/557f55534c63da5d84f6e7557f4656d44e6bebdb))
+    - Fix use of span to get number of days ([`a108b79`](https://github.com/Byron/cargo-smart-release/commit/a108b7977d44fd697ad8668f56179287c26d452d))
+</details>
+
 ## 0.21.5 (2024-08-31)
 
 ### Bug Fixes
@@ -19,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 2 commits contributed to the release.
+ - 3 commits contributed to the release.
  - 8 days passed between releases.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -31,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release cargo-smart-release v0.21.5 ([`44f2371`](https://github.com/Byron/cargo-smart-release/commit/44f2371d29603739572608aecd23f4c1654cf986))
     - Merge branch 'fix-27' ([`80244ed`](https://github.com/Byron/cargo-smart-release/commit/80244ed94c58e588253b2b67e995c42543bda2c0))
     - Compute amount of passed days between releases properly ([`6c58776`](https://github.com/Byron/cargo-smart-release/commit/6c587768acc26e98ac845bdd8d6283a0331a48fc))
 </details>
@@ -58,7 +110,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-read-only-do-not-edit/>
 
  - 16 commits contributed to the release.
- - 231 days passed between releases.
  - 4 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 1 unique issue was worked on: [#14](https://github.com/Byron/cargo-smart-release/issues/14)
 
@@ -107,7 +158,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-read-only-do-not-edit/>
 
  - 8 commits contributed to the release.
- - 83 days passed between releases.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -146,7 +196,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 13 commits contributed to the release.
+ - 13 commits contributed to the release over the course of 51 calendar days.
  - 51 days passed between releases.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -263,7 +313,7 @@ Please note that due to the rewritten history and tag-name changes, this changel
 
 <csr-read-only-do-not-edit/>
 
- - 33 commits contributed to the release.
+ - 33 commits contributed to the release over the course of 31 calendar days.
  - 34 days passed between releases.
  - 17 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -818,7 +868,6 @@ Please note that due to the rewritten history and tag-name changes, this changel
 <csr-read-only-do-not-edit/>
 
  - 688 commits contributed to the release.
- - 677 days passed between releases.
  - 154 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 36 unique issues were worked on: [#192](https://github.com/Byron/cargo-smart-release/issues/192), [#197](https://github.com/Byron/cargo-smart-release/issues/197), [#198](https://github.com/Byron/cargo-smart-release/issues/198), [#200](https://github.com/Byron/cargo-smart-release/issues/200), [#213](https://github.com/Byron/cargo-smart-release/issues/213), [#221](https://github.com/Byron/cargo-smart-release/issues/221), [#222](https://github.com/Byron/cargo-smart-release/issues/222), [#224](https://github.com/Byron/cargo-smart-release/issues/224), [#227](https://github.com/Byron/cargo-smart-release/issues/227), [#228](https://github.com/Byron/cargo-smart-release/issues/228), [#234](https://github.com/Byron/cargo-smart-release/issues/234), [#241](https://github.com/Byron/cargo-smart-release/issues/241), [#259](https://github.com/Byron/cargo-smart-release/issues/259), [#262](https://github.com/Byron/cargo-smart-release/issues/262), [#266](https://github.com/Byron/cargo-smart-release/issues/266), [#270](https://github.com/Byron/cargo-smart-release/issues/270), [#274](https://github.com/Byron/cargo-smart-release/issues/274), [#279](https://github.com/Byron/cargo-smart-release/issues/279), [#287](https://github.com/Byron/cargo-smart-release/issues/287), [#298](https://github.com/Byron/cargo-smart-release/issues/298), [#301](https://github.com/Byron/cargo-smart-release/issues/301), [#308](https://github.com/Byron/cargo-smart-release/issues/308), [#317](https://github.com/Byron/cargo-smart-release/issues/317), [#318](https://github.com/Byron/cargo-smart-release/issues/318), [#331](https://github.com/Byron/cargo-smart-release/issues/331), [#364](https://github.com/Byron/cargo-smart-release/issues/364), [#422](https://github.com/Byron/cargo-smart-release/issues/422), [#427](https://github.com/Byron/cargo-smart-release/issues/427), [#429](https://github.com/Byron/cargo-smart-release/issues/429), [#450](https://github.com/Byron/cargo-smart-release/issues/450), [#470](https://github.com/Byron/cargo-smart-release/issues/470), [#512](https://github.com/Byron/cargo-smart-release/issues/512), [#513](https://github.com/Byron/cargo-smart-release/issues/513), [#560](https://github.com/Byron/cargo-smart-release/issues/560), [#67](https://github.com/Byron/cargo-smart-release/issues/67), [#711](https://github.com/Byron/cargo-smart-release/issues/711)
 
@@ -1764,7 +1813,7 @@ A quality-of-life release which should make publishing of inter-dependent crates
 
 <csr-read-only-do-not-edit/>
 
- - 14 commits contributed to the release.
+ - 14 commits contributed to the release over the course of 3 calendar days.
  - 3 days passed between releases.
  - 0 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -1804,7 +1853,7 @@ A quality-of-life release which should make publishing of inter-dependent crates
 
 <csr-read-only-do-not-edit/>
 
- - 39 commits contributed to the release.
+ - 39 commits contributed to the release over the course of 20 calendar days.
  - 20 days passed between releases.
  - 0 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -1863,7 +1912,7 @@ A quality-of-life release which should make publishing of inter-dependent crates
 
 <csr-read-only-do-not-edit/>
 
- - 74 commits contributed to the release.
+ - 74 commits contributed to the release over the course of 4 calendar days.
  - 0 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
