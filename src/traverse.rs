@@ -134,7 +134,7 @@ pub struct Dependency<'meta> {
     pub mode: dependency::Mode,
 }
 
-impl<'a> std::fmt::Debug for Dependency<'a> {
+impl std::fmt::Debug for Dependency<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut dbg = f.debug_struct("Dependency");
         dbg.field("package", &self.package.id.repr);

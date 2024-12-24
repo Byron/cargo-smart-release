@@ -13,6 +13,7 @@ pub mod write;
 pub const DEFAULT_HEADING_LEVEL: usize = 2;
 
 #[derive(PartialEq, Eq, Debug, Clone)]
+#[allow(clippy::large_enum_variant)]
 pub enum Section {
     /// A part of a changelog which couldn't be understood and is taken in verbatim. This is usually the pre-amble of the changelog
     /// or a custom footer.
