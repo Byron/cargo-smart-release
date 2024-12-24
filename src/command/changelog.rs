@@ -1,5 +1,3 @@
-use std::io::Write;
-
 use crate::{
     bat,
     changelog::write::{Components, Linkables},
@@ -10,6 +8,7 @@ use crate::{
     version::BumpSpec,
     ChangeLog,
 };
+use std::io::Write;
 
 pub fn changelog(opts: Options, crates: Vec<String>) -> anyhow::Result<()> {
     let Options {

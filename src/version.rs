@@ -91,10 +91,13 @@ pub(crate) fn bump_package_with_spec(
         Major | Minor | Patch => bump_major_minor_patch(&mut v, bump_spec),
         Keep => false,
         Auto => {
+            use anyhow::Context;
             let segments = crate::git::history::crate_ref_segments(
                 package,
                 ctx,
-                ctx.history.as_ref().expect("BUG: assure history is set here"),
+                ctx.history
+                    .as_ref()
+                    .context("Did not have access to the Git history - please assure to not be on a detached HEAD")?,
                 crate::git::history::SegmentScope::Unreleased,
             )?;
             assert_eq!(
