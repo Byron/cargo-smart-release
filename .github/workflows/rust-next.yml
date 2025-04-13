@@ -38,6 +38,7 @@ jobs:
       run: cargo test --workspace --all-features
     - name: No-default features
       run: cargo test --workspace --no-default-features
+
   latest:
     name: "Check latest dependencies"
     runs-on: ubuntu-latest
