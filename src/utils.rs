@@ -53,7 +53,7 @@ pub fn is_top_level_package(manifest_path: &Utf8Path, repo: &gix::Repository) ->
         .strip_prefix(
             std::env::current_dir()
                 .expect("cwd")
-                .join(repo.work_dir().as_ref().expect("repo with working tree")),
+                .join(repo.workdir().as_ref().expect("repo with working tree")),
         )
         .is_ok_and(|p| p.components().count() == 1)
 }
