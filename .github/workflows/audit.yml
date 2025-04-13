@@ -6,8 +6,8 @@ permissions:
 on:
   pull_request:
     paths:
-      - '**/Cargo.toml'
-      - '**/Cargo.lock'
+    - '**/Cargo.toml'
+    - '**/Cargo.lock'
   push:
     branches:
     - main
@@ -40,7 +40,7 @@ jobs:
     strategy:
       matrix:
         checks:
-          - bans licenses sources
+        - bans licenses sources
     steps:
     - uses: actions/checkout@v3
     - uses: EmbarkStudios/cargo-deny-action@v1
