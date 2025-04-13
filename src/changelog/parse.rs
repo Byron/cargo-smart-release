@@ -404,7 +404,7 @@ fn parse_message_id(html: &str) -> Option<gix::hash::ObjectId> {
             'a'..='f' | '0'..='9'
         )
     })?;
-    gix::hash::ObjectId::from_hex(html[..end_of_hex].as_bytes()).ok()
+    gix::hash::ObjectId::from_hex(&html.as_bytes()[..end_of_hex]).ok()
 }
 
 fn update_unknown_range(target: &mut Option<Range<usize>>, source: Range<usize>) {

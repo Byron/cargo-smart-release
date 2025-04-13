@@ -51,7 +51,7 @@ impl From<gix::Url> for RepositoryUrl {
 
 impl RepositoryUrl {
     pub fn is_github(&self) -> bool {
-        self.inner.host().map_or(false, |h| h == "github.com")
+        self.inner.host() == Some("github.com")
     }
 
     fn cleaned_path(&self) -> String {

@@ -55,11 +55,11 @@ pub fn is_top_level_package(manifest_path: &Utf8Path, repo: &gix::Repository) ->
                 .expect("cwd")
                 .join(repo.work_dir().as_ref().expect("repo with working tree")),
         )
-        .map_or(false, |p| p.components().count() == 1)
+        .is_ok_and(|p| p.components().count() == 1)
 }
 
 pub fn version_req_unset_or_default(req: &VersionReq) -> bool {
-    req.comparators.last().map_or(true, |comp| comp.op == semver::Op::Caret)
+    req.comparators.last().is_none_or(|comp| comp.op == semver::Op::Caret)
 }
 
 pub fn package_eq_dependency_ignore_dev_without_version(package: &Package, dependency: &Dependency) -> bool {
@@ -70,14 +70,14 @@ pub fn package_eq_dependency_ignore_dev_without_version(package: &Package, depen
 pub fn workspace_package_by_dependency<'a>(meta: &'a Metadata, dep: &Dependency) -> Option<&'a Package> {
     meta.packages
         .iter()
-        .find(|p| p.name == dep.name && p.source.as_ref().map_or(true, |s| !s.is_crates_io()))
+        .find(|p| p.name == dep.name && p.source.as_ref().is_none_or(|s| !s.is_crates_io()))
         .filter(|p| meta.workspace_members.iter().any(|m| m == &p.id))
 }
 
 pub fn package_by_name<'a>(meta: &'a Metadata, name: &str) -> anyhow::Result<&'a Package> {
     meta.packages
         .iter()
-        .find(|p| p.name == name && p.source.as_ref().map_or(true, |s| !s.is_crates_io()))
+        .find(|p| p.name == name && p.source.as_ref().is_none_or(|s| !s.is_crates_io()))
         .ok_or_else(|| anyhow!("workspace member '{}' must be a listed package", name))
 }
 
