@@ -130,7 +130,8 @@ impl Section {
             if selection.contains(Selection::CLIPPY) {
                 let count = history
                     .iter()
-                    .filter(|item| item.message.title.starts_with("thanks clippy"))
+                    .map(|item| item.message.title.to_lowercase())
+                    .filter(|title| title.starts_with("thanks clippy") || title.starts_with("thanks, clippy"))
                     .count();
                 if count > 0 {
                     segments.push(Segment::Clippy(section::Data::Generated(
