@@ -116,11 +116,7 @@ pub(crate) fn bump_package_with_spec(
                 };
                 assert!(is_breaking, "BUG: breaking changes are…breaking :D");
                 is_breaking
-            } else if unreleased
-                .history
-                .iter()
-                .any(|item| item.message.kind.map_or(false, |kind| kind == "feat"))
-            {
+            } else if unreleased.history.iter().any(|item| item.message.kind == Some("feat")) {
                 let is_breaking = if is_pre_release(&v) {
                     bump_major_minor_patch(&mut v, Patch)
                 } else {
