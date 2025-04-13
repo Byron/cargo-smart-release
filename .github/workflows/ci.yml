@@ -36,7 +36,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: Swatinem/rust-cache@v2
     - name: Build
       run: cargo test --no-run --workspace --all-features
@@ -44,7 +44,7 @@ jobs:
       run: cargo test --workspace
     - name: All features
       run: cargo test --workspace --all-features
-    - uses: extractions/setup-just@v1
+    - uses: extractions/setup-just@v3
     - name: No-default features
       run: cargo test --workspace --no-default-features
     - name: Journey
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: Swatinem/rust-cache@v2
     - name: "Is lockfile updated?"
       run: cargo fetch --locked
@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: Swatinem/rust-cache@v2
     - name: Check documentation
       env:
@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: Swatinem/rust-cache@v2
     - name: Check formatting
       run: cargo fmt --all -- --check
@@ -101,7 +101,7 @@ jobs:
       security-events: write # to upload sarif results
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: Swatinem/rust-cache@v2
     - name: Install SARIF tools
       run: cargo install clippy-sarif
@@ -115,7 +115,7 @@ jobs:
         | sarif-fmt
       continue-on-error: true
     - name: Upload
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: clippy-results.sarif
         wait-for-processing: true
