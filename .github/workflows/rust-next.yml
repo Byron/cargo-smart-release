@@ -6,6 +6,7 @@ permissions:
 on:
   schedule:
   - cron: '1 1 1 * *'
+  workflow_dispatch:
 
 env:
   RUST_BACKTRACE: 1
