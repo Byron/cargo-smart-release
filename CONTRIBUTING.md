@@ -1,4 +1,4 @@
-# Contributing to PROJECT
+# Contributing to cargo-smart-release
 
 Thanks for wanting to contribute! There are many ways to contribute so there
 should be something suitable for your time-budget.
