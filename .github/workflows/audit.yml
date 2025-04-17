@@ -47,7 +47,7 @@ jobs:
         # but it works for the very simple call in actions-rs/audit-check, which is what matters.
         case "$1" in
         generate-lockfile)
-          printf '::warning SKIPPING: %s %s\n' "$0" "$*" ;;
+          printf '::warning:: SKIPPING: %s %s\n' "$0" "$*" ;;
         *)
           exec "$0.orig" "$@" ;;
         esac
