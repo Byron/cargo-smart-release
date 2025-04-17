@@ -565,7 +565,7 @@ fn set_version_and_update_package_dependency(
                                 dep_type,
                                 name_to_find,
                                 new_version,
-                                current_version_req.to_string()
+                                current_version_req
                             );
                         }
                         *current_version_req = toml_edit::Value::from(new_version.as_str());
