@@ -8,9 +8,13 @@ on:
     paths:
     - '**/Cargo.toml'
     - '**/Cargo.lock'
+    - '.github/workflows/audit.yml'
   push:
     branches:
     - main
+    - 'run-ci/**'
+    - '**/run-ci/**'
+  workflow_dispatch:
 
 env:
   RUST_BACKTRACE: 1
@@ -28,6 +32,28 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+    - uses: taiki-e/install-action@v2
+      with:
+        tool: cargo-audit
+    - name: Stub out `cargo generate-lockfile` to work around actions-rs/audit-check#163
+      run: |
+        cd ~/.cargo/bin
+        mv cargo cargo.orig
+
+        cat >cargo <<'EOF'
+        #!/bin/sh
+        set -eu
+        # Assume the first argument is the subcommand, rather than an option. This is not robust,
+        # but it works for the very simple call in actions-rs/audit-check, which is what matters.
+        case "$1" in
+        generate-lockfile)
+          printf '::warning:: SKIPPING: %s %s\n' "$0" "$*" ;;
+        *)
+          exec "$0.orig" "$@" ;;
+        esac
+        EOF
+
+        chmod +x cargo
     - uses: actions-rs/audit-check@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
