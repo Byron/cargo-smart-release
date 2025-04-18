@@ -37,7 +37,7 @@ cargo_toml = "0.22.1"
 winnow = "0.7.6"
 git-conventional = "0.12.0"
 jiff = "0.2.8"
-pulldown-cmark = "0.13.0"
+pulldown-cmark = "0.9.6"
 bitflags = "2"
 
 [dev-dependencies]
