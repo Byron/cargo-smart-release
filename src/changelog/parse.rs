@@ -470,7 +470,7 @@ impl<'a> TryFrom<&'a str> for Headline {
     }
 }
 
-fn headline<'a, E: ParserError<&'a str> + FromExternalError<&'a str, ()>>(i: &mut &'a str) -> PResult<Headline, E> {
+fn headline<'a, E: ParserError<&'a str> + FromExternalError<&'a str, ()>>(i: &mut &'a str) -> ModalResult<Headline, E> {
     let hashes = take_while(0.., |c: char| c == '#');
     let greedy_whitespace = |i: &mut &'a str| take_while(0.., char::is_whitespace).parse_next(i);
     let take_n_digits =
