@@ -6,7 +6,7 @@ use std::{
 };
 
 use gix::bstr::ByteSlice;
-use pulldown_cmark::{CowStr, Event, HeadingLevel, OffsetIter, Tag};
+use pulldown_cmark::{CowStr, Event, HeadingLevel, OffsetIter, Tag, TagEnd};
 use winnow::{
     ascii,
     combinator::{alt, delimited, opt, preceded, separated_pair, terminated},
@@ -136,7 +136,7 @@ impl Section {
                         }
                     }
                 }
-                Event::Start(Tag::Heading(indent, _, _)) => {
+                Event::Start(Tag::Heading { level: indent, .. }) => {
                     record_unknown_range(&mut segments, unknown_range.take(), &body);
                     enum State {
                         ParseConventional { title: String },
@@ -191,7 +191,7 @@ impl Section {
                             if matches!(state, State::ConsiderUserAuthored) {
                                 update_unknown_range(&mut unknown_range, range.clone());
                             }
-                            !matches!(e, Event::End(Tag::Heading(_, _, _)))
+                            !matches!(e, Event::End(TagEnd::Heading(_)))
                         })
                         .count();
                     match state {
@@ -232,7 +232,7 @@ impl Section {
 fn parse_conventional_to_next_section_title(
     markdown: &str,
     title: String,
-    events: &mut Peekable<OffsetIter<'_, '_>>,
+    events: &mut Peekable<OffsetIter<'_>>,
     level: HeadingLevel,
     unknown: &mut String,
 ) -> Segment {
@@ -259,7 +259,7 @@ fn parse_conventional_to_next_section_title(
     };
     while let Some((event, _range)) = events.peek() {
         match event {
-            Event::Start(Tag::Heading(indent, _, _)) if *indent == level => break,
+            Event::Start(Tag::Heading { level: indent, .. }) if *indent == level => break,
             _ => {
                 let (event, _range) = events.next().expect("peeked before so event is present");
                 match event {
@@ -316,7 +316,7 @@ fn parse_conventional_to_next_section_title(
                                         }
                                     }
                                 }
-                                Event::End(Tag::List(_)) => break,
+                                Event::End(TagEnd::List(_)) => break,
                                 event => track_unknown_event(event, unknown),
                             }
                         }
@@ -332,7 +332,7 @@ fn parse_conventional_to_next_section_title(
 
 fn parse_id_fallback_to_user_message(
     markdown: &str,
-    events: &mut Peekable<OffsetIter<'_, '_>>,
+    events: &mut Peekable<OffsetIter<'_>>,
     conventional: &mut Conventional,
     item_range: Range<usize>,
     tag: CowStr<'_>,
@@ -341,7 +341,7 @@ fn parse_id_fallback_to_user_message(
         Some(id) => {
             let mut events = events
                 .by_ref()
-                .take_while(|(e, _r)| !matches!(e, Event::End(Tag::Item)))
+                .take_while(|(e, _r)| !matches!(e, Event::End(TagEnd::Item)))
                 .map(|(_, r)| r);
             let start = events.next();
             let end = events.last().or_else(|| start.clone());
@@ -385,7 +385,7 @@ fn parse_id_fallback_to_user_message(
 
 fn make_user_message_and_consume_item(
     markdown: &str,
-    events: &mut Peekable<OffsetIter<'_, '_>>,
+    events: &mut Peekable<OffsetIter<'_>>,
     conventional: &mut Conventional,
     range: Range<usize>,
 ) {
@@ -394,7 +394,9 @@ fn make_user_message_and_consume_item(
         .push(section::segment::conventional::Message::User {
             markdown: markdown[range].trim_end().to_owned(),
         });
-    events.take_while(|(e, _)| !matches!(e, Event::End(Tag::Item))).count();
+    events
+        .take_while(|(e, _)| !matches!(e, Event::End(TagEnd::Item)))
+        .count();
 }
 
 fn parse_message_id(html: &str) -> Option<gix::hash::ObjectId> {
@@ -436,17 +438,17 @@ fn track_unknown_event(unknown_event: Event<'_>, unknown: &mut String) {
         | Event::Start(
             Tag::FootnoteDefinition(text)
             | Tag::CodeBlock(pulldown_cmark::CodeBlockKind::Fenced(text))
-            | Tag::Link(_, text, _)
-            | Tag::Image(_, text, _),
+            | Tag::Link { dest_url: text, .. }
+            | Tag::Image { dest_url: text, .. },
         ) => unknown.push_str(text.as_ref()),
         _ => {}
     }
 }
 
-fn skip_to_next_section_title(events: &mut Peekable<OffsetIter<'_, '_>>, level: HeadingLevel) {
+fn skip_to_next_section_title(events: &mut Peekable<OffsetIter<'_>>, level: HeadingLevel) {
     while let Some((event, _range)) = events.peek() {
         match event {
-            Event::Start(Tag::Heading(indent, _, _)) if *indent == level => break,
+            Event::Start(Tag::Heading { level: indent, .. }) if *indent == level => break,
             _ => {
                 events.next();
                 continue;
