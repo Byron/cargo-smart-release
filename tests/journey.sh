@@ -36,6 +36,12 @@ function init-git-repo() {
   git add . && git commit -q -m "initial"
 }
 
+function normalize-crates-io-versions() {
+  sed -E \
+    -e 's/[0-9]+\.[0-9]+\.[0-9]+[^ ,]* on crates\.io/<version> on crates.io/g' \
+    -e 's/(latest released version )[0-9]+\.[0-9]+\.[0-9]+[^ ,]*/\1<version>/g'
+}
+
 title "changelog"
 (sandbox
   set-static-git-environment
@@ -115,6 +121,7 @@ title "smart-release"
   (with_program gh
     (when "releasing 'a'"
       (with 'dry-run only'
+        SNAPSHOT_FILTER=normalize-crates-io-versions
         (with 'conditional version bumping'
           (with 'explicit bump specification'
             it "succeeds" && {

@@ -79,7 +79,9 @@ pub fn release(opts: Options, crates: Vec<String>, bump: BumpSpec, bump_dependen
 }
 
 fn should_update_crates_index(opts: &Options) -> bool {
-    opts.update_crates_index || (!opts.dry_run && !opts.skip_publish && opts.registry.is_none())
+    opts.update_crates_index
+        || (opts.registry.is_none()
+            && (opts.allow_auto_publish_of_stable_crates || (!opts.dry_run && !opts.skip_publish)))
 }
 
 impl From<Options> for traverse::Options {
@@ -614,6 +616,14 @@ mod tests {
         options.registry = Some("private".into());
 
         assert!(!should_update_crates_index(&options));
+    }
+
+    #[test]
+    fn updates_crates_index_for_auto_publishing_stable_crates() {
+        let mut options = options(true, false, false);
+        options.allow_auto_publish_of_stable_crates = true;
+
+        assert!(should_update_crates_index(&options));
     }
 
     #[test]

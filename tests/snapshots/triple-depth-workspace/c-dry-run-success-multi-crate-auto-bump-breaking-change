@@ -1,8 +1,7 @@
 [WARN ] Consider running with --update-crates-index to assure bumping on demand uses the latest information
-[WARN ] Crates.io index doesn't exist. Consider using --update-crates-index to help determining if release versions are published already
-[INFO ] Manifest version of dependent package 'a' at 0.8.0 is sufficient, creating a new release 🎉, ignoring computed version 0.8.1
-[INFO ] Manifest version of dependent package 'b' at 0.8.0 is sufficient, creating a new release 🎉, ignoring computed version 0.8.1
-[INFO ] Manifest version of provided package 'c' at 8.0.0 is sufficient, creating a new release 🎉, ignoring computed version 9.0.0
+[INFO ] Manifest version of dependent package 'a' at 0.8.0 is sufficient to succeed latest released version <version>, ignoring computed version 0.8.1
+[INFO ] Manifest version of dependent package 'b' at 0.8.0 is sufficient to succeed latest released version <version>, ignoring computed version 0.8.1
+[INFO ] Manifest version of provided package 'c' at 8.0.0 is sufficient to succeed latest released version <version>, ignoring computed version 9.0.0
 [INFO ] WOULD modify existing changelog for 'a'.
 [INFO ] WOULD modify existing changelog for 'b'.
 [INFO ] WOULD create a new changelog for 'c'.
