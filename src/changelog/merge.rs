@@ -121,8 +121,8 @@ impl Section {
                 };
                 for rhs_segment in src_segments {
                     match rhs_segment {
-                        Segment::User { markdown } => {
-                            bail!("BUG: User segments are never auto-generated: {markdown}")
+                        Segment::User { .. } => {
+                            bail!("Refusing to merge user-authored changelog content into another release")
                         }
                         Segment::Details(section::Data::Parsed)
                         | Segment::Statistics(section::Data::Parsed)

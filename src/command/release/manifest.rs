@@ -476,7 +476,12 @@ fn gather_changelog_data<'meta>(
                         .find(|s| matches!(s, changelog::Section::Release {name: changelog::Version::Semantic(v), ..} if v == *new_version))
                     {
                         Some(version_section) => {
-                            version_section.merge(recent_section).with_context(|| format!("Changelog generation of {:?} failed", publishee.name))?;
+                            version_section.merge(recent_section).with_context(|| {
+                                format!(
+                                    "Changelog generation for crate {:?} tried to merge 'Unreleased' into existing version '{}'. If these are unrelated releases, the crates.io index may be stale; retry with --update-crates-index",
+                                    publishee.name, new_version
+                                )
+                            })?;
                         }
                         None => log.sections.insert(recent_idx, recent_section),
                     }
