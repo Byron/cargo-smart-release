@@ -22,8 +22,8 @@ pub enum SubCommands {
         #[clap(long, short = 'e', help_heading = Some("MAJOR"))]
         execute: bool,
 
-        /// Always update the crates-index beforehand. It is used to determine if the computed version to be published was
-        /// already published.
+        /// Refresh queried crates through the sparse HTTP index before selecting release versions.
+        /// Actual crates.io publishes and stable auto-publishing refresh automatically.
         #[clap(long, short = 'u', help_heading = Some("MAJOR"))]
         update_crates_index: bool,
 

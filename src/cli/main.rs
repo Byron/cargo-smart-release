@@ -148,9 +148,13 @@ fn names_to_segment_selection(
 }
 
 fn init_logging(verbose: bool) {
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or(if verbose { "trace" } else { "info" }))
-        .format_module_path(false)
-        .format_target(false)
-        .format_timestamp(None)
-        .init();
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or(if verbose {
+        "info,cargo_smart_release=trace"
+    } else {
+        "info"
+    }))
+    .format_module_path(false)
+    .format_target(false)
+    .format_timestamp(None)
+    .init();
 }

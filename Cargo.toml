@@ -42,8 +42,13 @@ log = "0.4.33"
 toml_edit = "0.25"
 semver = "1.0.28"
 crates-index = { version = "3.14.0", default-features = false, features = [
-    "git-performance",
-    "git-https",
+    "sparse",
+] }
+reqwest = { version = "0.13.4", default-features = false, features = [
+    "blocking",
+    "gzip",
+    "http2",
+    "native-tls",
 ] }
 cargo_toml = "1.0.0"
 winnow = "1.0.4"

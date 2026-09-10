@@ -59,19 +59,14 @@ pub fn release(opts: Options, crates: Vec<String>, bump: BumpSpec, bump_dependen
         opts.changelog
     };
 
+    let ctx = Context::new(crates, bump, bump_dependencies, allow_changelog, opts.changelog_links)?;
     if should_update_crates_index(&opts) {
-        // Do this before creating our context to pick up a possibly newly fetched/created index.
         log::info!("Updating crates-io index",);
-        crates_index::GitIndex::new_cargo_default()?.update()?;
+        ctx.base.crates_index.update();
     } else if opts.bump_when_needed {
         log::warn!(
             "Consider running with --update-crates-index to assure bumping on demand uses the latest information"
         );
-    }
-
-    let ctx = Context::new(crates, bump, bump_dependencies, allow_changelog, opts.changelog_links)?;
-    if !ctx.base.crates_index.exists() {
-        log::warn!("Crates.io index doesn't exist. Consider using --update-crates-index to help determining if release versions are published already");
     }
 
     release_depth_first(ctx, opts)?;
@@ -124,12 +119,9 @@ fn assure_crates_index_is_uptodate<'meta>(
                 .and_then(|lr| (lr >= &b.next_release).then_some(d))
         })
     {
-        let mut index = crate::crates_index::Index::new_cargo_default()?;
-        if index.exists() {
-            log::warn!("Crate '{}' computed version not greater than the current package version. Updating crates index to assure correct results.", dep.package.name);
-            index.update()?;
-            return traverse::dependencies(ctx, opts);
-        }
+        log::warn!("Crate '{}' computed version not greater than the current package version. Updating crates index to assure correct results.", dep.package.name);
+        ctx.crates_index.update();
+        return traverse::dependencies(ctx, opts);
     }
     Ok(crates)
 }
@@ -442,7 +434,7 @@ fn perform_release(ctx: &Context, options: Options, crates: &[Dependency<'_>]) -
     let prevent_default_members = ctx.base.meta.workspace_members.len() > 1;
     for (publishee, new_version) in crates.iter().filter_map(try_to_published_crate_and_new_version) {
         if let Some((crate_, version)) = successful_publishees_and_version.last() {
-            if let Err(err) = wait_for_release(crate_, version, options.clone()) {
+            if let Err(err) = wait_for_release(&crate_.name, version, &ctx.base.crates_index, options.clone()) {
                 log::warn!(
                     "Failed to wait for crates-index update - trying to publish '{} v{}' anyway: {}.",
                     publishee.name,
@@ -487,18 +479,18 @@ fn perform_release(ctx: &Context, options: Options, crates: &[Dependency<'_>]) -
 }
 
 fn wait_for_release(
-    crate_: &cargo_metadata::Package,
+    crate_name: &str,
     crate_version: &semver::Version,
+    index: &crate::crates_index::Index,
     Options {
         dry_run,
         dry_run_cargo_publish,
         skip_publish,
+        registry,
         ..
     }: Options,
 ) -> anyhow::Result<()> {
-    use anyhow::Context;
-
-    if skip_publish || dry_run || dry_run_cargo_publish {
+    if skip_publish || dry_run || dry_run_cargo_publish || registry.is_some() {
         return Ok(());
     }
     let timeout = std::time::Duration::from_secs(60);
@@ -506,33 +498,25 @@ fn wait_for_release(
     let sleep_time = std::time::Duration::from_secs(1);
     let crate_version = crate_version.to_string();
 
-    log::info!("Waiting for '{} v{}' to arrive in index…", crate_.name, crate_version);
-    let mut crates_index = crates_index::GitIndex::new_cargo_default()?;
+    log::info!("Waiting for '{} v{}' to arrive in index…", crate_name, crate_version);
     let mut attempt = 0;
     while start.elapsed() < timeout {
         attempt += 1;
-        log::trace!("Updating crates index…");
-        crates_index.update()?;
-        let crate_ = crates_index.crate_(&crate_.name).with_context(|| {
-            format!(
-                "Couldn't find crate '{}' in index anymore - unexpected and fatal",
-                crate_.name
-            )
-        })?;
-
-        if crate_
-            .versions()
-            .iter()
-            .rev()
-            .any(|version| version.version() == crate_version)
-        {
-            break;
+        log::trace!("Querying sparse index for '{crate_name}'…");
+        if index.fetch_crate(crate_name)?.is_some_and(|krate| {
+            krate
+                .versions()
+                .iter()
+                .rev()
+                .any(|version| version.version() == crate_version)
+        }) {
+            return Ok(());
         }
 
         std::thread::sleep(sleep_time);
         log::info!("attempt {attempt}");
     }
-    Ok(())
+    bail!("Timed out waiting for '{crate_name} v{crate_version}' to arrive in the crates.io index")
 }
 
 enum WriteMode {
